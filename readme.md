@@ -37,4 +37,4 @@ Quando usar
 [ ] DDD
 [ ] Unit of Work (repositories)
 [ ] config to test e2e
-[ ] zod validation (com base em um DTO)
+[ ] zod validation

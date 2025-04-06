@@ -21,7 +21,7 @@
     "eslint:fix": "npx eslint --fix src/**/*.ts",
     "prettier:format": "prettier --write src/**/*.ts",
     "lint-staged": "lint-staged",
-    "test": "vitest run",
+    "test": "vitest run --reporter=verbose",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "npm run build",
