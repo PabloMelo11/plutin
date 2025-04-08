@@ -1,0 +1,63 @@
+import cors from '@fastify/cors'
+import Controller, { Request } from 'core/http/controller'
+import type IHttp from 'core/http/http'
+import type { MethodType } from 'core/http/http'
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import qs from 'qs'
+
+import { ErrorResponseCode } from './response-error-code'
+
+export default class FastifyAdapter implements IHttp {
+  readonly instance: FastifyInstance
+
+  constructor(readonly envs: Record<string, unknown>) {
+    this.instance = fastify({
+      bodyLimit: 10 * 1024 * 1024,
+      querystringParser: (str) => qs.parse(str),
+    })
+
+    this.instance.register(cors)
+  }
+
+  registerRoute(method: MethodType, url: string, callback: Controller): void {
+    this.instance[method](
+      url,
+      async (request: FastifyRequest, reply: FastifyReply) => {
+        try {
+          const requestData = {
+            body: request.body,
+            params: request.params,
+            headers: request.headers,
+            query: request.query,
+          } as Request
+
+          const output = await callback.handle(requestData)
+          return reply.status(output.code || 200).send(
+            output.data || {
+              code: ErrorResponseCode.NO_CONTENT_BODY,
+            }
+          )
+        } catch (err: any) {
+          const error = callback.failure(err)
+          return reply.status(error.code || 200).send(
+            error.data || {
+              code: ErrorResponseCode.NO_CONTENT_ERROR,
+            }
+          )
+        }
+      }
+    )
+  }
+
+  async startServer(port: number): Promise<void> {
+    await this.instance.listen({ port })
+
+    if (this.envs.NODE_ENV !== 'test') {
+      console.log(`🚀  Server is running on PORT ${port}`)
+    }
+  }
+
+  async closeServer() {
+    await this.instance.close()
+  }
+}
