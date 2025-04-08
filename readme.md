@@ -38,3 +38,4 @@ Quando usar
 [ ] Unit of Work (repositories)
 [ ] config to test e2e
 [ ] zod validation
+[ ] controller receive error agente (sentry)
