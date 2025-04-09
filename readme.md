@@ -32,7 +32,7 @@ Quando usar
 ### Steps
 
 [ ] publish in npm (automatic)
-[ ] adapters (express, fastify)
+[x] adapters (express, fastify)
 [ ] controller decorator
 [ ] DDD
 [ ] Unit of Work (repositories)
