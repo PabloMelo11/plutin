@@ -6,7 +6,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
+  "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,7 +16,8 @@
   "author": "Pablo",
   "license": "ISC",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "npx ts-node-dev src/temp/server.ts",
+    "build": "tsup src --format cjs,esm --dts",
     "prepare:husky": "husky install",
     "eslint:fix": "npx eslint --fix src/**/*.ts",
     "prettier:format": "prettier --write src/**/*.ts",
@@ -49,6 +50,7 @@
     "husky": "9.1.7",
     "lint-staged": "15.5.0",
     "prettier": "3.2.5",
+    "ts-node-dev": "2.0.0",
     "tsup": "7.2.0",
     "typescript": "5.8.3",
     "typescript-eslint": "8.29.0",

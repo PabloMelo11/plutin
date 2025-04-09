@@ -1,4 +1,4 @@
-import ConflictError from 'core/errors/conflict-error'
+import ConflictError from '../core/errors/conflict-error'
 
 import Controller from './controller'
 

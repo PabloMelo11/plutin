@@ -1,8 +1,8 @@
-import type Controller from 'core/http/controller'
-import IHttp from 'core/http/http'
 import cors from 'cors'
 import express, { Express, Request, Response } from 'express'
 
+import type Controller from '../../../core/http/controller'
+import type IHttp from '../../../core/http/http'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
@@ -18,8 +18,9 @@ export default class ExpressAdapter implements IHttp {
     this.instance.disable('x-powered-by')
   }
 
-  registerRoute(controllerClass: new () => Controller): void {
-    const { controller, metadata } = validateControllerMetadata(controllerClass)
+  registerRoute(controllerClass: Controller): void {
+    const { metadata } = validateControllerMetadata(controllerClass)
+
     this.instance[metadata.method](
       metadata.url,
       async (request: Request, response: Response) => {
@@ -30,12 +31,12 @@ export default class ExpressAdapter implements IHttp {
             headers: request.headers,
             query: request.query,
           }
-          const output = await controller.handle(requestData)
+          const output = await controllerClass.handle(requestData)
           response
             .status(output.code || 204)
             .json(output.data || { code: ErrorResponseCode.NO_CONTENT_BODY })
         } catch (err: any) {
-          const error = controller.failure(err)
+          const error = controllerClass.failure(err)
           response.status(error.code).json(
             error.data || {
               error: ErrorResponseCode.NO_CONTENT_ERROR,
@@ -49,7 +50,7 @@ export default class ExpressAdapter implements IHttp {
   async startServer(port: number): Promise<void> {
     return new Promise((resolve) => {
       this.server = this.instance.listen(port, () => {
-        console.log(`🚀 EServer is running on PORT ${port}`)
+        console.log(`🚀 Server is running on PORT ${port}`)
         resolve()
       })
     })

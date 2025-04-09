@@ -1,4 +1,4 @@
-import type IDomainEvent from 'core/events/domain-event'
+import type IDomainEvent from '../core/events/domain-event'
 
 import Handler from './handler'
 

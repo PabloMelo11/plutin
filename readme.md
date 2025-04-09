@@ -33,9 +33,13 @@ Quando usar
 
 [ ] publish in npm (automatic)
 [x] adapters (express, fastify)
-[ ] controller decorator
+[x] controller decorator
+[ ] replace dependencies in test env
+[ ] create namespace use-case to use controller 
 [ ] DDD
 [ ] Unit of Work (repositories)
 [ ] config to test e2e
 [ ] zod validation
 [ ] controller receive error agente (sentry)
+[ ] create doc via DTO
+[ ] execute middlewares. Pass in decorator Http?

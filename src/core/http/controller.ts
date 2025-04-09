@@ -1,8 +1,8 @@
-import ApplicationError from 'core/errors/application-error'
-import ConflictError from 'core/errors/conflict-error'
-import DomainError from 'core/errors/domain-error'
-import InfraError from 'core/errors/infra-error'
-import ValidationError from 'core/errors/validation-error'
+import ApplicationError from '../../core/errors/application-error'
+import ConflictError from '../../core/errors/conflict-error'
+import DomainError from '../../core/errors/domain-error'
+import InfraError from '../../core/errors/infra-error'
+import ValidationError from '../../core/errors/validation-error'
 
 export type AnyObject = Record<string, any>
 

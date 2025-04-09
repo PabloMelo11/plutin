@@ -1,9 +1,9 @@
 import cors from '@fastify/cors'
-import Controller, { Request } from 'core/http/controller'
 import type IHttp from 'core/http/http'
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
+import Controller, { Request } from '../../../core/http/controller'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
@@ -19,8 +19,8 @@ export default class FastifyAdapter implements IHttp {
     this.instance.register(cors)
   }
 
-  registerRoute(controllerClass: new () => Controller): void {
-    const { controller, metadata } = validateControllerMetadata(controllerClass)
+  registerRoute(controllerClass: Controller): void {
+    const { metadata } = validateControllerMetadata(controllerClass)
 
     this.instance[metadata.method](
       metadata.url,
@@ -33,14 +33,14 @@ export default class FastifyAdapter implements IHttp {
             query: request.query,
           } as Request
 
-          const output = await controller.handle(requestData)
+          const output = await controllerClass.handle(requestData)
           return reply.status(output.code || 200).send(
             output.data || {
               code: ErrorResponseCode.NO_CONTENT_BODY,
             }
           )
         } catch (err: any) {
-          const error = controller.failure(err)
+          const error = controllerClass.failure(err)
           return reply.status(error.code || 200).send(
             error.data || {
               code: ErrorResponseCode.NO_CONTENT_ERROR,

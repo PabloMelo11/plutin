@@ -1,90 +1,67 @@
-type Constructor<T = any> = new (...args: any[]) => T
+import 'reflect-metadata'
 
-type DependencyOptions = {
-  singleton?: boolean
-}
-
-type Registration<T = any> =
-  | {
-      type: 'class'
-      useClass: Constructor<T>
-      singleton: boolean
-    }
-  | {
-      type: 'instance'
-      value: T
-    }
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-const injectMetadata = new Map<Function, Map<string, string>>()
+type Token = string
 
 export class DependencyContainer {
-  private static registry = new Map<string, Registration>()
-  private static singletons = new Map<string, any>()
+  static registry = new Map<Token, { myClass: any; singleton: boolean }>()
+  static singletons = new Map<Token, any>()
 
-  public static register<T>(
-    token: string,
-    useClass: Constructor<T>,
-    options: DependencyOptions = {}
+  static register<T>(
+    token: Token,
+    myClass: new (...args: any[]) => T,
+    options: { singleton: boolean }
   ) {
-    this.registry.set(token, {
-      type: 'class',
-      useClass,
-      singleton: options.singleton ?? false,
+    this.registry.set(token, { myClass, singleton: options.singleton })
+  }
+
+  static resolve<T>(target: new (...args: any[]) => T): T {
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || []
+    const injectMetadata: Record<number, Token> =
+      Reflect.getOwnMetadata('inject:params', target) || {}
+
+    const params = paramTypes.map((_: any, index: number) => {
+      const token = injectMetadata[index]
+      if (!token) {
+        throw new Error(
+          `Missing @Inject token for parameter index ${index} in ${target.name}`
+        )
+      }
+
+      return this.resolveToken(token)
     })
+
+    return new target(...params)
   }
 
-  public static registerInstance<T>(token: string, instance: T) {
-    this.registry.set(token, {
-      type: 'instance',
-      value: instance,
-    })
-  }
-
-  public static replace<T>(
-    token: string,
-    replacement: Constructor<T> | T,
-    options: DependencyOptions = {}
-  ) {
-    if (typeof replacement === 'function') {
-      this.register(token, replacement as Constructor<T>, options)
-    } else {
-      this.registerInstance(token, replacement)
-    }
-  }
-
-  public static resolve<T>(token: string): T {
+  private static resolveToken(token: Token): any {
     const registration = this.registry.get(token)
-    if (!registration) throw new Error(`Dependency not found: ${token}`)
+    if (!registration) throw new Error(`Token "${token}" not registered`)
 
-    if (registration.type === 'instance') return registration.value
-
-    if (registration.singleton && this.singletons.has(token)) {
+    if (registration.singleton) {
+      if (!this.singletons.has(token)) {
+        const instance = this.resolve(registration.myClass)
+        this.singletons.set(token, instance)
+      }
       return this.singletons.get(token)
     }
 
-    const instance = new registration.useClass()
-
-    const targetInjects = injectMetadata.get(registration.useClass)
-    if (targetInjects) {
-      for (const [propertyKey, injectToken] of targetInjects.entries()) {
-        const dep = this.resolve(injectToken)
-        ;(instance as any)[propertyKey] = dep
-      }
-    }
-
-    if (registration.singleton) {
-      this.singletons.set(token, instance)
-    }
-
-    return instance
+    return this.resolve(registration.myClass)
   }
+}
 
-  static registerInjection(target: any, propertyKey: string, token: string) {
-    const ctor = target.constructor
-    if (!injectMetadata.has(ctor)) {
-      injectMetadata.set(ctor, new Map())
-    }
-    injectMetadata.get(ctor)!.set(propertyKey, token)
+export function Inject(token: string): ParameterDecorator {
+  return (
+    target: object,
+    _propertyKey: string | symbol | undefined,
+    parameterIndex: number
+  ): void => {
+    const constructor =
+      typeof target === 'function' ? target : target.constructor
+    const existingInjectedParams: Record<number, string> =
+      Reflect.getOwnMetadata('inject:params', constructor) || {}
+
+    existingInjectedParams[parameterIndex] = token
+
+    Reflect.defineMetadata('inject:params', existingInjectedParams, constructor)
   }
 }

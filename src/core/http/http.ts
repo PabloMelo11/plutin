@@ -3,7 +3,7 @@ import type Controller from './controller'
 export type MethodType = 'get' | 'post' | 'delete' | 'put' | 'patch'
 
 export default interface IHttp {
-  registerRoute(controller: new (...args: any[]) => Controller): void
+  registerRoute(controller: Controller): void
   startServer(port: number): Promise<void>
   closeServer(): Promise<void>
 }

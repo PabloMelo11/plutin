@@ -1,22 +1,21 @@
-import type Controller from 'core/http/controller'
-import type { MethodType } from 'core/http/http'
+import 'reflect-metadata'
 
-export function validateControllerMetadata(
-  controllerClass: new () => Controller
-) {
-  const controller = new controllerClass()
+import type Controller from '../../../core/http/controller'
+import type { MethodType } from '../../../core/http/http'
 
-  const metadata = Reflect.getMetadata('route', controllerClass) as {
+export function validateControllerMetadata(controller: Controller) {
+  const metadata = Reflect.getMetadata('route', controller.constructor) as {
     method: MethodType
     url: string
   }
 
   if (!metadata) {
-    throw new Error(`Controller ${controllerClass.name} not have metadata`)
+    throw new Error(
+      `Controller ${controller.constructor.name} not have metadata. Need to add decorator.`
+    )
   }
 
   return {
-    controller,
     metadata,
   }
 }

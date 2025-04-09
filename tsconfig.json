@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "declaration": true,
     "baseUrl": "./src",
     "outDir": "dist",
@@ -11,6 +11,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["vitest/globals"],
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "isolatedModules": false,
     "paths": {}
   },
   "include": ["src"],
