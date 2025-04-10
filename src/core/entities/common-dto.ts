@@ -1,6 +1,6 @@
 export type CommonDTO = {
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export type CreateCommonDTO = {

@@ -21,7 +21,7 @@ export abstract class Entity<Props extends CommonDTO> {
     this.props.createdAt = date
   }
 
-  get updatedAt(): Date | undefined {
+  get updatedAt(): Date | undefined | null {
     return this.props.updatedAt
   }
 
