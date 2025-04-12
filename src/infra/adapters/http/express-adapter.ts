@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express, { Express, Request, Response } from 'express'
 
-import type Controller from '../../../core/http/controller'
+import type BaseController from '../../../core/http/controller'
 import type IHttp from '../../../core/http/http'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
@@ -18,7 +18,7 @@ export default class ExpressAdapter implements IHttp {
     this.instance.disable('x-powered-by')
   }
 
-  registerRoute(controllerClass: Controller): void {
+  registerRoute(controllerClass: BaseController): void {
     const { metadata } = validateControllerMetadata(controllerClass)
 
     this.instance[metadata.method](

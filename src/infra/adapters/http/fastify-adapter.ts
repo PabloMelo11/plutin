@@ -3,7 +3,7 @@ import type IHttp from 'core/http/http'
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
-import Controller, { Request } from '../../../core/http/controller'
+import BaseController, { Request } from '../../../core/http/controller'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
@@ -19,7 +19,7 @@ export default class FastifyAdapter implements IHttp {
     this.instance.register(cors)
   }
 
-  registerRoute(controllerClass: Controller): void {
+  registerRoute(controllerClass: BaseController): void {
     const { metadata } = validateControllerMetadata(controllerClass)
 
     this.instance[metadata.method](

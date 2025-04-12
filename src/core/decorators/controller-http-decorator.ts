@@ -1,9 +1,9 @@
-import Controller from '../http/controller'
+import BaseController from '../http/controller'
 import type { MethodType } from '../http/http'
 
-export function Http(method: MethodType, url: string): ClassDecorator {
+export function Controller(method: MethodType, url: string): ClassDecorator {
   return (target: any) => {
-    if (!(target.prototype instanceof Controller)) {
+    if (!(target.prototype instanceof BaseController)) {
       throw new Error(
         `The class ${target.name} should extends abstract class Controller`
       )

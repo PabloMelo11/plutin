@@ -18,7 +18,7 @@ export type Response = {
   data: any
 }
 
-export default abstract class Controller {
+export default abstract class BaseController {
   abstract handle(request: Request): Promise<Response>
 
   protected success<T>(dto?: T): Response {

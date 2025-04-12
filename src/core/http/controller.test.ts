@@ -1,9 +1,9 @@
-import ConflictError from '../core/errors/conflict-error'
 
-import Controller from './controller'
+import ConflictError from '../errors/conflict-error'
+import BaseController from './controller'
 
 test('conflict error with one object', async () => {
-  class ControllerError extends Controller {
+  class ControllerError extends BaseController {
     async handle(): Promise<any> {
       try {
         throw new ConflictError({ id: 'ID' })
@@ -34,7 +34,7 @@ test('conflict error with one object', async () => {
 })
 
 test('conflict error with array of objects', async () => {
-  class ControllerError extends Controller {
+  class ControllerError extends BaseController {
     async handle(): Promise<any> {
       try {
         throw new ConflictError([{ id: 'ID 1' }, { id: 'ID 2' }])
