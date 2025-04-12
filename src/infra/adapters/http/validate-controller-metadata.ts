@@ -6,7 +6,7 @@ import type { MethodType } from '../../../core/http/http'
 export function validateControllerMetadata(controller: Controller) {
   const metadata = Reflect.getMetadata('route', controller.constructor) as {
     method: MethodType
-    url: string
+    path: string
   }
 
   if (!metadata) {

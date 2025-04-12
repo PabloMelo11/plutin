@@ -1,13 +1,11 @@
 import 'reflect-metadata'
 
-type Token = string
-
 export class DependencyContainer {
-  static registry = new Map<Token, { myClass: any; singleton: boolean }>()
-  static singletons = new Map<Token, any>()
+  static registry = new Map<string, { myClass: any; singleton: boolean }>()
+  static singletons = new Map<string, any>()
 
   static register<T>(
-    token: Token,
+    token: string,
     myClass: new (...args: any[]) => T,
     options: { singleton: boolean }
   ) {
@@ -16,11 +14,13 @@ export class DependencyContainer {
 
   static resolve<T>(target: new (...args: any[]) => T): T {
     const paramTypes = Reflect.getMetadata('design:paramtypes', target) || []
-    const injectMetadata: Record<number, Token> =
+
+    const injectMetadata: Record<number, string> =
       Reflect.getOwnMetadata('inject:params', target) || {}
 
     const params = paramTypes.map((_: any, index: number) => {
       const token = injectMetadata[index]
+
       if (!token) {
         throw new Error(
           `Missing @Inject token for parameter index ${index} in ${target.name}`
@@ -33,9 +33,12 @@ export class DependencyContainer {
     return new target(...params)
   }
 
-  private static resolveToken(token: Token): any {
+  private static resolveToken(token: string): any {
     const registration = this.registry.get(token)
-    if (!registration) throw new Error(`Token "${token}" not registered`)
+
+    if (!registration) {
+      throw new Error(`"${token}" not registered. I need to register in container.`)
+    }
 
     if (registration.singleton) {
       if (!this.singletons.has(token)) {
@@ -57,6 +60,7 @@ export function Inject(token: string): ParameterDecorator {
   ): void => {
     const constructor =
       typeof target === 'function' ? target : target.constructor
+
     const existingInjectedParams: Record<number, string> =
       Reflect.getOwnMetadata('inject:params', constructor) || {}
 

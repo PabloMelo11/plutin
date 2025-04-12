@@ -22,7 +22,7 @@ export default class ExpressAdapter implements IHttp {
     const { metadata } = validateControllerMetadata(controllerClass)
 
     this.instance[metadata.method](
-      metadata.url,
+      metadata.path,
       async (request: Request, response: Response) => {
         try {
           const requestData = {

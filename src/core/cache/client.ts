@@ -1,4 +1,4 @@
-import { UniqueEntityId } from '../core/entities/unique-entity-id'
+import { UniqueEntityId } from '../../core/entities/unique-entity-id'
 
 export abstract class CacheClient {
   abstract start(): Promise<void>

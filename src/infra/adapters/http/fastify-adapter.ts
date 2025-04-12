@@ -23,7 +23,7 @@ export default class FastifyAdapter implements IHttp {
     const { metadata } = validateControllerMetadata(controllerClass)
 
     this.instance[metadata.method](
-      metadata.url,
+      metadata.path,
       async (request: FastifyRequest, reply: FastifyReply) => {
         try {
           const requestData = {

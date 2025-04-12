@@ -2,11 +2,13 @@ import { Inject } from '../core/decorators/dependency-container'
 import { Controller } from '../core/decorators/controller-http-decorator'
 import BaseController, { type Response } from '../core/http/controller'
 
-@Controller('get', '/temp')
+@Controller({
+  method: 'get',
+  path: '/temp',
+})
 export class TempController extends BaseController {
   constructor(
-    @Inject('CreateTempUseCase')
-    private createTempUseCase: any
+    @Inject('CreateTempUseCase') private createTempUseCase: any
   ) {
     super()
   }

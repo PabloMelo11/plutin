@@ -1,4 +1,4 @@
-import type IDomainEvent from '../core/events/domain-event'
+import type IDomainEvent from '../../core/events/domain-event'
 
 /**
  * @property queueName Queue name or exchange case using rabbitMQ.
