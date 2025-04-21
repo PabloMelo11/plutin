@@ -16,7 +16,7 @@
   "author": "Pablo",
   "license": "ISC",
   "scripts": {
-    "dev": "vite-node --watch src/temp/server.ts",
+    "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node -r ts-node/register src/temp/server.ts",
     "build": "tsup src --format cjs,esm --dts",
     "prepare:husky": "husky install",
     "eslint:fix": "npx eslint --fix src/**/*.ts",

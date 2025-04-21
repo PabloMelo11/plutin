@@ -2,7 +2,7 @@ export default interface ITempRepository {
   get(): Promise<any>
 }
 
-export class TempRepository {
+export default class TempRepository {
   temp: any[] = [
     {
       name: 'Pablo',

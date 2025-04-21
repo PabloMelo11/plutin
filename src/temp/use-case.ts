@@ -1,6 +1,7 @@
 import ApplicationError from '../core/errors/application-error'
 import { Inject } from '../core/decorators/dependency-container'
 import type ITempRepository from './repository'
+import ConflictError from '../core/errors/conflict-error'
 
 export type Input = {
   name: string
@@ -22,15 +23,14 @@ export type Output = {
   createdAt: Date
 }
 
-export class TempUseCase {
+export default class TempUseCase {
   constructor(
     @Inject('TempRepository') private tempRepository: ITempRepository
   ) {}
 
   async execute(data: Input): Promise<Output> {
     console.log(data)
-    const response = await this.tempRepository.get()
-    throw new ApplicationError('My Error')
-    return response
+    await this.tempRepository.get()
+    throw new ConflictError({ id: '1' })
   }
 }

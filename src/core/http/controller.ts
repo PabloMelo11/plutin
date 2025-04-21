@@ -85,6 +85,8 @@ export default abstract class BaseController {
         code: error.props.code,
         data: {
           message: error.message,
+          errorCode: error.props.errorCode,
+          occurredAt: error.props.occurredAt,
           items: Array.isArray(error.conflictProps) ? error.conflictProps : [error.conflictProps],
         },
       }

@@ -45,8 +45,8 @@ Headers -	kebab-case (lowercase)
 [TEMPLATE] Unit of Work (repositories)
 [TEMPLATE] config to test e2e
 [TEMPLATE] import paths with '@/'
-[ ] controller receive error agente (sentry)
-[ ] create doc via DTO
+[x] controller receive error agente (sentry)
+[ ] create doc via DTO (zod?)
 [x] execute middlewares. Pass in decorator Http?
-[ ] remove dependencies to start server (ts-node, ts-node-dev, vite-node, )
+[ ] remove dependencies to start server unnecessary (ts-node, ts-node-dev, vite-node)
 [ ] 100% coverage tests

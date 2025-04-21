@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { Controller } from '../core/decorators/controller-http-decorator'
 import { Inject } from '../core/decorators/dependency-container'
 import BaseController, { type Response } from '../core/http/controller'
-import { type TempUseCase } from './use-case'
+import TempUseCase from './use-case'
 
 export const tempSchema = z.object({
   params: z.object({
