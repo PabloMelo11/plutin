@@ -1,8 +1,8 @@
-import NotificationErrorInMemory from '../infra/notifications/in-memory'
 import DependencyContainer from '../core/decorators/dependency-container'
+import { env } from '../infra/env'
+import NotificationErrorInMemory from '../infra/notifications/in-memory'
 import TempRepository from './repository'
 import TempUseCase from './use-case'
-import { env } from '../infra/env'
 
 DependencyContainer.register('TempRepository', TempRepository, {
   singleton: true,

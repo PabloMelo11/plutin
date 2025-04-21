@@ -36,9 +36,7 @@ type TempSchema = z.infer<typeof tempSchema>
   middlewares: [],
 })
 export default class TempController extends BaseController {
-  constructor(
-    @Inject('CreateTempUseCase') private useCase: TempUseCase
-  ) {
+  constructor(@Inject('CreateTempUseCase') private useCase: TempUseCase) {
     super()
   }
 
