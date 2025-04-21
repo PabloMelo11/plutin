@@ -17,7 +17,7 @@ export default class ZodMapError {
       path: error.path.join('.'),
       property: error.path.pop(),
       propertyType: error.expected,
-      value: error.received,
+      receivedValue: error.received,
       message: error.message,
     };
   }

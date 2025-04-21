@@ -1,5 +1,5 @@
 export type PropertiesError = {
-  value?: any;
+  receivedValue?: any;
   type: string;
   message: string;
   property: string | number | undefined;

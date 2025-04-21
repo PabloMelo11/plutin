@@ -5,6 +5,7 @@ import type BaseController from '../../../core/http/controller'
 import type IHttp from '../../../core/http/http'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
+import { env } from '../../../infra/env'
 
 export default class ExpressAdapter implements IHttp {
   readonly instance: Express
@@ -24,19 +25,30 @@ export default class ExpressAdapter implements IHttp {
     this.instance[metadata.method](
       metadata.path,
       async (request: Request, response: Response) => {
-        try {
-          const requestData = {
-            body: request.body,
-            params: request.params,
-            headers: request.headers,
-            query: request.query,
-          }
+        const requestData = {
+          body: request.body,
+          params: request.params,
+          headers: request.headers,
+          query: request.query,
+        }
+
+        try { 
           const output = await controllerClass.execute(requestData)
           response
             .status(output.code || 204)
             .json(output.data || { code: ErrorResponseCode.NO_CONTENT_BODY })
         } catch (err: any) {
-          const error = controllerClass.failure(err)
+          const error = await controllerClass.failure(err, {
+            env: env.ENVIRONMENT,
+            request: {
+              body: requestData.body,
+              headers: requestData.headers,
+              params: request.params,
+              query: requestData.query,
+              url: metadata.path,
+              method: metadata.method,
+            }
+          })
           response.status(error.code).json(
             error.data || {
               error: ErrorResponseCode.NO_CONTENT_ERROR,

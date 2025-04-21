@@ -42,10 +42,11 @@ Headers -	kebab-case (lowercase)
 [x] adapters (express, fastify)
 [x] controller decorator
 [x] create validator (sync)
-[ ] replace dependencies in test env
-[ ] Unit of Work (repositories)
-[ ] config to test e2e
+[TEMPLATE] Unit of Work (repositories)
+[TEMPLATE] config to test e2e
+[TEMPLATE] import paths with '@/'
 [ ] controller receive error agente (sentry)
 [ ] create doc via DTO
 [x] execute middlewares. Pass in decorator Http?
+[ ] remove dependencies to start server (ts-node, ts-node-dev, vite-node, )
 [ ] 100% coverage tests

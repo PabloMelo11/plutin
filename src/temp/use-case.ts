@@ -1,25 +1,26 @@
+import ApplicationError from '../core/errors/application-error'
 import { Inject } from '../core/decorators/dependency-container'
 import type ITempRepository from './repository'
 
 export type Input = {
-  name: string;
-  age: number;
+  name: string
+  age: number
   skills: Array<{
-    name: string;
-    level: 'beginner' | 'intermediate' | 'advanced';
-  }>;
+    name: string
+    level: 'beginner' | 'intermediate' | 'advanced'
+  }>
 }
-  
+
 export type Output = {
-  id: string;
-  name: string;
-  age: number;
+  id: string
+  name: string
+  age: number
   skills: Array<{
-    name: string;
-    level: 'beginner' | 'intermediate' | 'advanced';
-  }>;
-  createdAt: Date;
-};
+    name: string
+    level: 'beginner' | 'intermediate' | 'advanced'
+  }>
+  createdAt: Date
+}
 
 export class TempUseCase {
   constructor(
@@ -27,7 +28,9 @@ export class TempUseCase {
   ) {}
 
   async execute(data: Input): Promise<Output> {
+    console.log(data)
     const response = await this.tempRepository.get()
+    throw new ApplicationError('My Error')
     return response
   }
 }

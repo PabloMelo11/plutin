@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
-import { Inject } from '../core/decorators/dependency-container'
 import { Controller } from '../core/decorators/controller-http-decorator'
+import { Inject } from '../core/decorators/dependency-container'
 import BaseController, { type Response } from '../core/http/controller'
-import { zodValidator } from '../infra/adapters/validators/zod'
 import { type TempUseCase } from './use-case'
 
 export const tempSchema = z.object({
@@ -16,33 +15,35 @@ export const tempSchema = z.object({
   body: z.object({
     name: z.string().min(1),
     age: z.number().min(1),
-    skills: z.array(z.object({
-      name: z.string().min(1),
-      level: z.enum(['beginner', 'intermediate', 'advanced']),
-    })),
+    skills: z.array(
+      z.object({
+        name: z.string().min(1),
+        level: z.enum(['beginner', 'intermediate', 'advanced']),
+      })
+    ),
   }),
   query: z.object({
     name: z.string().optional(),
     age: z.number().optional(),
   }),
-});
+})
 
-type TempSchema = z.infer<typeof tempSchema>;
+type TempSchema = z.infer<typeof tempSchema>
 
 @Controller({
-  method: 'get',
+  method: 'post',
   path: '/temp',
-  middlewares: [zodValidator(tempSchema)],
+  middlewares: [],
 })
-export class TempController extends BaseController {
+export default class TempController extends BaseController {
   constructor(
-    @Inject('CreateTempUseCase') private createTempUseCase: TempUseCase
+    @Inject('CreateTempUseCase') private useCase: TempUseCase
   ) {
     super()
   }
 
   async handle(request: TempSchema): Promise<Response> {
-    const response = await this.createTempUseCase.execute({
+    const response = await this.useCase.execute({
       name: request.body.name,
       age: request.body.age,
       skills: request.body.skills,

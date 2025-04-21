@@ -6,6 +6,7 @@ import qs from 'qs'
 import BaseController, { Request } from '../../../core/http/controller'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
+import { env } from '../../../infra/env'
 
 export default class FastifyAdapter implements IHttp {
   readonly instance: FastifyInstance
@@ -25,14 +26,14 @@ export default class FastifyAdapter implements IHttp {
     this.instance[metadata.method](
       metadata.path,
       async (request: FastifyRequest, reply: FastifyReply) => {
-        try {
-          const requestData = {
-            body: request.body,
-            params: request.params,
-            headers: request.headers,
-            query: request.query,
-          } as Request
-
+        const requestData = {
+          body: request.body,
+          params: request.params,
+          headers: request.headers,
+          query: request.query,
+        } as Request
+      
+        try {  
           const output = await controllerClass.execute(requestData)
           return reply.status(output.code || 200).send(
             output.data || {
@@ -40,7 +41,17 @@ export default class FastifyAdapter implements IHttp {
             }
           )
         } catch (err: any) {
-          const error = controllerClass.failure(err)
+          const error = await controllerClass.failure(err, {
+            env: env.ENVIRONMENT,
+            request: {
+              body: requestData.body,
+              headers: requestData.headers,
+              params: request.params,
+              query: requestData.query,
+              url: metadata.path,
+              method: metadata.method,
+            }
+          })
           return reply.status(error.code || 200).send(
             error.data || {
               code: ErrorResponseCode.NO_CONTENT_ERROR,

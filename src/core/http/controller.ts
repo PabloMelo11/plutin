@@ -6,6 +6,9 @@ import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
+import DependencyContainer from '../../core/decorators/dependency-container'
+import IErrorNotifier from './error-notifier'
+import { env } from '../../infra/env'
 
 export type AnyObject = Record<string, any>
 
@@ -21,8 +24,32 @@ export type Response = {
   data: any
 }
 
+export type ContextError = {
+  env: string
+  user?: {
+    id?: string,
+    name?: string,
+    email?: string
+  }
+  request?: {
+    method?: string
+    requestId?: string
+    url?: string
+    headers?: any
+    query?: any
+    body?: any
+    params?: any
+  }
+}
+
 export default abstract class BaseController {
+  protected readonly errorNotifier: IErrorNotifier;
+
   abstract handle<T>(request: T | Request): Promise<Response>
+
+  constructor() {
+    this.errorNotifier = DependencyContainer.resolveToken('IErrorNotifier');
+  }
 
   protected success<T>(dto?: T): Response {
     return {
@@ -52,7 +79,7 @@ export default abstract class BaseController {
     }
   }
 
-  public failure(error: Error): Response {
+  public async failure(error: Error, context?: ContextError): Promise<Response> {
     if (error instanceof ConflictError) {
       return {
         code: error.props.code,
@@ -90,14 +117,15 @@ export default abstract class BaseController {
       }
     }
 
-    console.error(error)
+    if (env.SHOULD_NOTIFY_ERROR) {
+      await this.errorNotifier.notify(error, context);
+    }
 
     return {
       code: 500,
       data: {
         code: 500,
         message: 'Server failed. Contact the administrator!',
-        reason: error,
       },
     }
   }

@@ -1,7 +1,7 @@
-import type { CommonDTO } from "../core/entities/common-dto"
-import { Entity } from "../core/entities/entity"
-import { UniqueEntityId } from "../core/entities/unique-entity-id"
-import type { Optional } from "../core/types/optional"
+import type { CommonDTO } from '../core/entities/common-dto'
+import { Entity } from '../core/entities/entity'
+import { UniqueEntityId } from '../core/entities/unique-entity-id'
+import type { Optional } from '../core/types/optional'
 
 type Props = {
   id: UniqueEntityId
@@ -22,11 +22,7 @@ export class UserEntity extends Entity<Props> {
       id: props.id,
       name: props.name,
       createdAt: props.createdAt,
-      updatedAt: props.updatedAt
+      updatedAt: props.updatedAt,
     })
   }
 }
-
-const userEntity = UserEntity.create({
-  name: 'Pablo'
-})
