@@ -1,16 +1,15 @@
-type HTTPOutput = {
-  code?: number
-  headers?: Record<string, string>
-  body?: any
-}
+import { ApiErrorEnum, type ApiCommonError } from "./api-common-error"
 
-export default class HttpError extends Error {
-  code: number
-  response: HTTPOutput
-
-  constructor(response: HTTPOutput) {
-    super(response?.body?.message || 'Request error')
-    this.code = response?.code || 400
-    this.response = response
+export default class HttpClientError extends Error {
+  props: ApiCommonError
+  
+  constructor(message?: string) {
+    super(message)
+    this.props = {
+      code: 400,
+      errorCode: ApiErrorEnum.HTTP_CLIENT,
+      message: message || 'Request error',
+      occurredAt: new Date()
+    }
   }
 }

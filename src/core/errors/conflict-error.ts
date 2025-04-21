@@ -1,12 +1,19 @@
+import { ApiErrorEnum, type ApiCommonError } from "./api-common-error";
+
 type ConflictProps = { id: string; [key: string]: unknown }
 
 export default class ConflictError<T extends ConflictProps> extends Error {
-  code: number
-  props: T | T[]
-
-  constructor(props: T | T[]) {
+  props: ApiCommonError
+  conflictProps: T | T[]
+  
+  constructor(conflictProps: T | T[]) {
     super('Resource already exists.')
-    this.code = 409
-    this.props = props
+    this.conflictProps = conflictProps,
+    this.props = {
+      code: 409,
+      errorCode: ApiErrorEnum.APPLICATION,
+      message: this.message,
+      occurredAt: new Date(),
+    }
   }
 }

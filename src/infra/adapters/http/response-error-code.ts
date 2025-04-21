@@ -1,4 +1,4 @@
 export enum ErrorResponseCode {
-  NO_CONTENT_BODY = 'ER001',
-  NO_CONTENT_ERROR = 'ER002',
+  NO_CONTENT_BODY = 'B001',
+  NO_CONTENT_ERROR = 'B002',
 }

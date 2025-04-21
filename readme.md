@@ -29,17 +29,25 @@ Quando usar
 - 1.1.1:	Corrigiu bugs sem mudar funcionalidade
 - 2.0.0:	Mudança que quebra compatibilidade
 
+### Padrões
+
+Body -	camelCase - snake_case
+Query -	camelCase - snake_case
+Path (URLs) - kebab-case - snake_case
+Headers -	kebab-case (lowercase)
+
 ### Steps
 
 [ ] publish in npm (automatic)
 [x] adapters (express, fastify)
 [x] controller decorator
+[ ] create validator (sync)
 [ ] replace dependencies in test env
 [ ] create namespace use-case to use controller 
 [ ] DDD
 [ ] Unit of Work (repositories)
 [ ] config to test e2e
-[ ] zod validation
 [ ] controller receive error agente (sentry)
 [ ] create doc via DTO
 [ ] execute middlewares. Pass in decorator Http?
+[ ] 100% coverage tests

@@ -1,8 +1,16 @@
-export default class DomainError extends Error {
-  code: number
+import { ApiErrorEnum, type ApiCommonError } from "./api-common-error"
 
-  constructor(message: string, code = 400) {
+
+export default class DomainError extends Error {
+  props: ApiCommonError
+  
+  constructor(message: string) {
     super(message)
-    this.code = code
+    this.props = {
+      code: 400,
+      errorCode: ApiErrorEnum.DOMAIN,
+      message,
+      occurredAt: new Date()
+    }
   }
 }

@@ -52,11 +52,10 @@ export default abstract class BaseController {
   public failure(error: Error): Response {
     if (error instanceof ConflictError) {
       return {
-        code: error.code,
+        code: error.props.code,
         data: {
-          code: error.code,
           message: error.message,
-          items: Array.isArray(error.props) ? error.props : [error.props],
+          items: Array.isArray(error.conflictProps) ? error.conflictProps : [error.conflictProps],
         },
       }
     }
@@ -67,18 +66,23 @@ export default abstract class BaseController {
       error instanceof InfraError
     ) {
       return {
-        code: error.code,
-        data: { code: error.code, message: error.message },
+        code: error.props.code,
+        data: {
+          message: error.message,
+          errorCode: error.props.errorCode,
+          occurredAt: error.props.occurredAt
+        },
       }
     }
 
     if (error instanceof ValidationError) {
       return {
-        code: error.code,
+        code: error.props.code,
         data: {
-          code: error.code,
-          message: error.message,
-          errors: error.errors,
+          message: error.props.message,
+          errorCode: error.props.errorCode,
+          occurredAt: error.props.occurredAt,
+          errors: error.props.errors,
         },
       }
     }
