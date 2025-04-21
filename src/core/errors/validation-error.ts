@@ -1,8 +1,12 @@
-import { ApiErrorEnum, type ApiCommonError, type CommonError, type PropertiesError } from './api-common-error';
+import {
+  type ApiCommonError,
+  ApiErrorEnum,
+  type CommonError,
+} from './api-common-error'
 
 export default class ValidationError extends Error {
   props: ApiCommonError
-  
+
   constructor(errors: CommonError[]) {
     super('Validation Error')
     this.props = {
@@ -10,7 +14,7 @@ export default class ValidationError extends Error {
       errorCode: ApiErrorEnum.VALIDATOR,
       message: 'Validation Error',
       occurredAt: new Date(),
-      errors
+      errors,
     }
   }
 }

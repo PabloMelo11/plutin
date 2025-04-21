@@ -1,5 +1,5 @@
-import type { ContextError } from '../../core/http/controller'
-import type IErrorNotifier from '../../core/http/error-notifier'
+import type { ContextError } from '../../../core/http/controller'
+import type IErrorNotifier from '../../../core/http/error-notifier'
 
 export default class NotificationErrorInMemory implements IErrorNotifier {
   public errors: any[] = []

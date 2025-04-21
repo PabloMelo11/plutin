@@ -1,6 +1,6 @@
 import DependencyContainer from '../core/decorators/dependency-container'
+import NotificationErrorInMemory from '../infra/adapters/notifications/in-memory'
 import { env } from '../infra/env'
-import NotificationErrorInMemory from '../infra/notifications/in-memory'
 import TempRepository from './repository'
 import TempUseCase from './use-case'
 

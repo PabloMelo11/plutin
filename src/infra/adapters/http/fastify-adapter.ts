@@ -4,9 +4,9 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
 import BaseController, { Request } from '../../../core/http/controller'
+import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
-import { env } from '../../../infra/env'
 
 export default class FastifyAdapter implements IHttp {
   readonly instance: FastifyInstance
@@ -32,8 +32,8 @@ export default class FastifyAdapter implements IHttp {
           headers: request.headers,
           query: request.query,
         } as Request
-      
-        try {  
+
+        try {
           const output = await controllerClass.execute(requestData)
           return reply.status(output.code || 200).send(
             output.data || {
@@ -50,7 +50,7 @@ export default class FastifyAdapter implements IHttp {
               query: requestData.query,
               url: metadata.path,
               method: metadata.method,
-            }
+            },
           })
           return reply.status(error.code || 200).send(
             error.data || {

@@ -49,7 +49,7 @@ Headers - kebab-case (lowercase)
 [TEMPLATE] config to test e2e
 [TEMPLATE] import paths with '@/'
 [x] controller receive error agente (sentry)
-[ ] controller receive error agente (discord)
+[x] controller receive error agente (discord)
 [ ] create doc via DTO (zod?)
 [x] execute middlewares. Pass in decorator Http?
 [ ] remove dependencies to start server unnecessary (ts-node, ts-node-dev, vite-node)

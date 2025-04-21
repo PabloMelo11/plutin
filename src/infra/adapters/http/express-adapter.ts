@@ -3,9 +3,9 @@ import express, { Express, Request, Response } from 'express'
 
 import type BaseController from '../../../core/http/controller'
 import type IHttp from '../../../core/http/http'
+import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
-import { env } from '../../../infra/env'
 
 export default class ExpressAdapter implements IHttp {
   readonly instance: Express
@@ -32,7 +32,7 @@ export default class ExpressAdapter implements IHttp {
           query: request.query,
         }
 
-        try { 
+        try {
           const output = await controllerClass.execute(requestData)
           response
             .status(output.code || 204)
@@ -47,7 +47,7 @@ export default class ExpressAdapter implements IHttp {
               query: requestData.query,
               url: metadata.path,
               method: metadata.method,
-            }
+            },
           })
           response.status(error.code).json(
             error.data || {

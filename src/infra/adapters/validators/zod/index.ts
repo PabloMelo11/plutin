@@ -1,26 +1,26 @@
-import { ZodObject, ZodEffects, type ZodError } from 'zod';
+import { ZodEffects, type ZodError, ZodObject } from 'zod'
 
-import IValidationHTTP, { RequestHttp } from '../../../../core/http/validator';
-import ZodMapError from './zod-map-error';
-import ValidationError from '../../../../core/errors/validation-error';
-import { zodValidator } from './zod-validator';
+import ValidationError from '../../../../core/errors/validation-error'
+import IValidationHTTP, { RequestHttp } from '../../../../core/http/validator'
+import ZodMapError from './zod-map-error'
+import { zodValidator } from './zod-validator'
 
 type SchemaDefinition = {
-  headers: ZodObject<Record<string, any>>;
-  params: ZodObject<Record<string, any>>;
-  query: ZodObject<Record<string, any>>;
+  headers: ZodObject<Record<string, any>>
+  params: ZodObject<Record<string, any>>
+  query: ZodObject<Record<string, any>>
   body:
     | ZodObject<Record<string, any>>
-    | ZodEffects<ZodObject<Record<string, any>>>;
-};
+    | ZodEffects<ZodObject<Record<string, any>>>
+}
 
-type ZodSchemaObject = ZodObject<SchemaDefinition>;
+type ZodSchemaObject = ZodObject<SchemaDefinition>
 
 export default class ZodValidator implements IValidationHTTP {
   constructor(private zodSchema: ZodSchemaObject) {}
 
   async validate<T>(requestHttp: RequestHttp): Promise<T> {
-    const errors = [];
+    const errors = []
 
     const {
       data: headersData = {},
@@ -29,10 +29,10 @@ export default class ZodValidator implements IValidationHTTP {
       ? await this.zodSchema.shape.headers.safeParseAsync(requestHttp.headers, {
           path: ['headers'],
         })
-      : {};
+      : {}
 
     if (headersErrors?.errors) {
-      errors.push(headersErrors?.errors);
+      errors.push(headersErrors?.errors)
     }
 
     const {
@@ -42,10 +42,10 @@ export default class ZodValidator implements IValidationHTTP {
       ? await this.zodSchema.shape.params.safeParseAsync(requestHttp.params, {
           path: ['params'],
         })
-      : {};
+      : {}
 
     if (paramsErrors?.errors) {
-      errors.push(paramsErrors?.errors);
+      errors.push(paramsErrors?.errors)
     }
 
     const {
@@ -55,10 +55,10 @@ export default class ZodValidator implements IValidationHTTP {
       ? await this.zodSchema.shape.query.safeParseAsync(requestHttp.query, {
           path: ['query'],
         })
-      : {};
+      : {}
 
     if (queryErrors?.errors) {
-      errors.push(queryErrors?.errors);
+      errors.push(queryErrors?.errors)
     }
 
     const {
@@ -68,14 +68,14 @@ export default class ZodValidator implements IValidationHTTP {
       ? await this.zodSchema.shape.body.safeParseAsync(requestHttp.body, {
           path: ['body'],
         })
-      : {};
+      : {}
 
     if (bodyErrors?.errors) {
-      errors.push(bodyErrors?.errors);
+      errors.push(bodyErrors?.errors)
     }
 
     if (errors.length) {
-      throw new ValidationError(ZodMapError.mapErrors(errors));
+      throw new ValidationError(ZodMapError.mapErrors(errors))
     }
 
     return {
@@ -83,8 +83,8 @@ export default class ZodValidator implements IValidationHTTP {
       headers: headersData,
       params: paramsData,
       query: queryData,
-    } as T;
+    } as T
   }
 }
 
-export { zodValidator };
+export { zodValidator }

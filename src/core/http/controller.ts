@@ -1,14 +1,14 @@
 import 'reflect-metadata'
 
+import DependencyContainer from '../../core/decorators/dependency-container'
 import ApplicationError from '../../core/errors/application-error'
 import ConflictError from '../../core/errors/conflict-error'
 import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
-import DependencyContainer from '../../core/decorators/dependency-container'
-import IErrorNotifier from './error-notifier'
 import { env } from '../../infra/env'
+import IErrorNotifier from './error-notifier'
 
 export type AnyObject = Record<string, any>
 
@@ -27,8 +27,8 @@ export type Response = {
 export type ContextError = {
   env: string
   user?: {
-    id?: string,
-    name?: string,
+    id?: string
+    name?: string
     email?: string
   }
   request?: {
@@ -43,12 +43,12 @@ export type ContextError = {
 }
 
 export default abstract class BaseController {
-  protected readonly errorNotifier: IErrorNotifier;
+  protected readonly errorNotifier: IErrorNotifier
 
   abstract handle<T>(request: T | Request): Promise<Response>
 
   constructor() {
-    this.errorNotifier = DependencyContainer.resolveToken('IErrorNotifier');
+    this.errorNotifier = DependencyContainer.resolveToken('IErrorNotifier')
   }
 
   protected success<T>(dto?: T): Response {
@@ -79,7 +79,19 @@ export default abstract class BaseController {
     }
   }
 
-  public async failure(error: Error, context?: ContextError): Promise<Response> {
+  protected buildContextError(request: Request): ContextError {
+    return {
+      env: env.ENVIRONMENT,
+      request: {
+        body: request.body,
+        headers: request.headers,
+        params: request.params,
+        query: request.query,
+      },
+    }
+  }
+
+  public async failure(error: Error, context: ContextError): Promise<Response> {
     if (error instanceof ConflictError) {
       return {
         code: error.props.code,
@@ -87,7 +99,9 @@ export default abstract class BaseController {
           message: error.message,
           errorCode: error.props.errorCode,
           occurredAt: error.props.occurredAt,
-          items: Array.isArray(error.conflictProps) ? error.conflictProps : [error.conflictProps],
+          items: Array.isArray(error.conflictProps)
+            ? error.conflictProps
+            : [error.conflictProps],
         },
       }
     }
@@ -102,7 +116,7 @@ export default abstract class BaseController {
         data: {
           message: error.message,
           errorCode: error.props.errorCode,
-          occurredAt: error.props.occurredAt
+          occurredAt: error.props.occurredAt,
         },
       }
     }
@@ -120,7 +134,7 @@ export default abstract class BaseController {
     }
 
     if (env.SHOULD_NOTIFY_ERROR) {
-      await this.errorNotifier.notify(error, context);
+      await this.errorNotifier.notify(error, context)
     }
 
     return {
@@ -133,19 +147,22 @@ export default abstract class BaseController {
   }
 
   public async execute(request: Request): Promise<Response> {
-    try {
-      const routeMetadata = Reflect.getMetadata('route', this.constructor);
-      const middlewares: MiddlewareFunction[] = routeMetadata?.middlewares || [];
-      
-      let processedRequest = request;
+    const routeMetadata = Reflect.getMetadata('route', this.constructor)
 
-      for (const middleware of middlewares) {
-        processedRequest = await middleware(processedRequest);
-      }
-      
-      return await this.handle(processedRequest);
-    } catch (error) {
-      return this.failure(error as Error);
+    if (!routeMetadata) {
+      throw new InfraError('Route metadata not found.')
     }
+
+    const middlewares: MiddlewareFunction[] = routeMetadata.middlewares || []
+
+    let processedRequest = request
+
+    if (middlewares.length) {
+      for (const middleware of middlewares) {
+        processedRequest = await middleware(processedRequest)
+      }
+    }
+
+    return await this.handle(processedRequest)
   }
 }

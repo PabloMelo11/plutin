@@ -1,70 +1,76 @@
 import 'reflect-metadata'
 
-type Class<T = any> = new (...args: any[]) => T;
+type Class<T = any> = new (...args: any[]) => T
 
 type Registration =
   | { type: 'class'; myClass: Class; singleton: boolean }
-  | { type: 'value'; value: any };
+  | { type: 'value'; value: any }
 
 export default class DependencyContainer {
-  static registry = new Map<string, Registration>();
-  static singletons = new Map<string, any>();
+  static registry = new Map<string, Registration>()
+  static singletons = new Map<string, any>()
 
   static register<T>(
     token: string,
     myClass: Class<T>,
     options: { singleton: boolean }
   ) {
-    this.registry.set(token, { type: 'class', myClass, singleton: options.singleton });
+    this.registry.set(token, {
+      type: 'class',
+      myClass,
+      singleton: options.singleton,
+    })
   }
 
   static registerValue<T>(token: string, value: T) {
-    this.registry.set(token, { type: 'value', value });
+    this.registry.set(token, { type: 'value', value })
   }
 
   static resolve<T>(target: Class<T>): T {
-    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || [];
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || []
 
     const injectMetadata: Record<number, string> =
-      Reflect.getOwnMetadata('inject:params', target) || {};
+      Reflect.getOwnMetadata('inject:params', target) || {}
 
     const params = paramTypes.map((_: any, index: number) => {
-      const token = injectMetadata[index];
+      const token = injectMetadata[index]
 
       if (!token) {
         throw new Error(
           `Missing @Inject token for parameter index ${index} in ${target.name}`
-        );
+        )
       }
 
-      return this.resolveToken(token);
-    });
+      return this.resolveToken(token)
+    })
 
-    return new target(...params);
+    return new target(...params)
   }
 
   static resolveToken(token: string): any {
-    const registration = this.registry.get(token);
+    const registration = this.registry.get(token)
 
     if (!registration) {
-      throw new Error(`"${token}" not registered. Please register it in the container.`);
+      throw new Error(
+        `"${token}" not registered. Please register it in the container.`
+      )
     }
 
     if (registration.type === 'value') {
-      return registration.value;
+      return registration.value
     }
 
-    const { myClass, singleton } = registration;
+    const { myClass, singleton } = registration
 
     if (singleton) {
       if (!this.singletons.has(token)) {
-        const instance = this.resolve(myClass);
-        this.singletons.set(token, instance);
+        const instance = this.resolve(myClass)
+        this.singletons.set(token, instance)
       }
-      return this.singletons.get(token);
+      return this.singletons.get(token)
     }
 
-    return this.resolve(myClass);
+    return this.resolve(myClass)
   }
 }
 
