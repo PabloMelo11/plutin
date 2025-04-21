@@ -22,7 +22,7 @@ export type Response = {
 }
 
 export default abstract class BaseController {
-  abstract handle(request: Request): Promise<Response>
+  abstract handle<T>(request: T | Request): Promise<Response>
 
   protected success<T>(dto?: T): Response {
     return {
