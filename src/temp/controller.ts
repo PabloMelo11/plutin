@@ -2,8 +2,9 @@ import { z } from 'zod'
 
 import { Inject } from '../core/decorators/dependency-container'
 import { Controller } from '../core/decorators/controller-http-decorator'
-import BaseController, { type Request, type Response } from '../core/http/controller'
+import BaseController, { type Response } from '../core/http/controller'
 import { zodValidator } from '../infra/adapters/validators/zod'
+import { type TempUseCase } from './use-case'
 
 export const tempSchema = z.object({
   params: z.object({
@@ -35,13 +36,17 @@ type TempSchema = z.infer<typeof tempSchema>;
 })
 export class TempController extends BaseController {
   constructor(
-    @Inject('CreateTempUseCase') private createTempUseCase: any
+    @Inject('CreateTempUseCase') private createTempUseCase: TempUseCase
   ) {
     super()
   }
 
   async handle(request: TempSchema): Promise<Response> {
-    const response = await this.createTempUseCase.execute(request)
+    const response = await this.createTempUseCase.execute({
+      name: request.body.name,
+      age: request.body.age,
+      skills: request.body.skills,
+    })
 
     return this.success(response)
   }

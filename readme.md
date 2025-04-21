@@ -43,11 +43,9 @@ Headers -	kebab-case (lowercase)
 [x] controller decorator
 [x] create validator (sync)
 [ ] replace dependencies in test env
-[ ] create namespace use-case to use controller 
-[ ] DDD
 [ ] Unit of Work (repositories)
 [ ] config to test e2e
 [ ] controller receive error agente (sentry)
 [ ] create doc via DTO
-[ ] execute middlewares. Pass in decorator Http?
+[x] execute middlewares. Pass in decorator Http?
 [ ] 100% coverage tests
