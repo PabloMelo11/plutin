@@ -32,7 +32,7 @@ type TempSchema = z.infer<typeof tempSchema>
 
 @Controller({
   method: 'post',
-  path: '/temp',
+  path: 'temp',
   middlewares: [],
 })
 export default class TempController extends BaseController {

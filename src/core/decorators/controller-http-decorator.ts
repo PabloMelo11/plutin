@@ -20,6 +20,10 @@ export function Controller({
       )
     }
 
-    Reflect.defineMetadata('route', { method, path, middlewares }, target)
+    Reflect.defineMetadata(
+      'route',
+      { method, path: `/api/${path}`, middlewares },
+      target
+    )
   }
 }
