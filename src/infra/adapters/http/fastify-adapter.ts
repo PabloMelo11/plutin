@@ -3,7 +3,7 @@ import type IHttp from 'core/http/http'
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
-import BaseController, { Request } from '../../../core/http/controller'
+import BaseController, { Request } from '../../../core/http/base-controller'
 import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'

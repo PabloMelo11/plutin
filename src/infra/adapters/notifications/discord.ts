@@ -1,7 +1,7 @@
 import { Inject } from 'core/decorators/dependency-container'
 import { MessageBuilder, Webhook } from 'discord-webhook-node'
 
-import type { ContextError } from '../../../core/http/controller'
+import type { ContextError } from '../../../core/http/base-controller'
 import type IErrorNotifier from '../../../core/http/error-notifier'
 
 type DiscordOptions = {

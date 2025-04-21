@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express, { Express, Request, Response } from 'express'
 
-import type BaseController from '../../../core/http/controller'
+import type BaseController from '../../../core/http/base-controller'
 import type IHttp from '../../../core/http/http'
 import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'

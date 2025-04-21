@@ -1,11 +1,15 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/index.ts'],
-  format: ['esm', 'cjs'],
+  entry: ['src/core/index.ts', 'src/infra/index.ts'],
+  format: ['esm'],
+  outDir: 'dist',
   dts: true,
   clean: true,
   sourcemap: true,
+  splitting: false,
+  target: 'es2022',
+  minify: false,
   tsconfig: './tsconfig.build.json',
   esbuildOptions(options) {
     options.alias = {

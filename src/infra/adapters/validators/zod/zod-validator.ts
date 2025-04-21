@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { Request } from '../../../../core/http/controller'
+import { Request } from '../../../../core/http/base-controller'
 import ZodValidator from './index'
 
 export type ZodSchema = z.ZodObject<{

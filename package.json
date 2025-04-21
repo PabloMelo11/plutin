@@ -6,9 +6,20 @@
   "publishConfig": {
     "access": "public"
   },
+  "exports": {
+    ".": "./dist/core/index.js",
+    "./core": {
+      "import": "./dist/core/index.js",
+      "types": "./dist/core/index.d.ts"
+    },
+    "./infra": {
+      "import": "./dist/infra/index.js",
+      "types": "./dist/infra/index.d.ts"
+    }
+  },
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/core/index.js",
+  "types": "./dist/core/index.d.ts",
   "files": [
     "dist"
   ],

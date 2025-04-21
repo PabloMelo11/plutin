@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import type Controller from '../../../core/http/controller'
+import type Controller from '../../../core/http/base-controller'
 import type { MethodType } from '../../../core/http/http'
 
 export function validateControllerMetadata(controller: Controller) {
