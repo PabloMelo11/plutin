@@ -1,4 +1,5 @@
 ### Fluxo completo:
+
 - Mudanças no código.
 - Atualiza a versão no package.json.
 - Comita com o novo código.
@@ -8,6 +9,7 @@
   git tag v1.2.0
   git push origin v1.2.0
 ```
+
 O CI entra em ação e publica a versão 1.2.0 no NPM.
 
 ### Commits
@@ -24,17 +26,18 @@ O CI entra em ação e publica a versão 1.2.0 no NPM.
 Formato: MAJOR.MINOR.PATCH
 
 Quando usar
-- 1.0.0:	Primeira versão estável
-- 1.1.0:	Adicionou funcionalidades sem quebrar nada
-- 1.1.1:	Corrigiu bugs sem mudar funcionalidade
-- 2.0.0:	Mudança que quebra compatibilidade
+
+- 1.0.0: Primeira versão estável
+- 1.1.0: Adicionou funcionalidades sem quebrar nada
+- 1.1.1: Corrigiu bugs sem mudar funcionalidade
+- 2.0.0: Mudança que quebra compatibilidade
 
 ### Padrões
 
-Body -	camelCase - snake_case
-Query -	camelCase - snake_case
+Body - camelCase - snake_case
+Query - camelCase - snake_case
 Path (URLs) - kebab-case - snake_case
-Headers -	kebab-case (lowercase)
+Headers - kebab-case (lowercase)
 
 ### Steps
 
@@ -46,6 +49,7 @@ Headers -	kebab-case (lowercase)
 [TEMPLATE] config to test e2e
 [TEMPLATE] import paths with '@/'
 [x] controller receive error agente (sentry)
+[ ] controller receive error agente (discord)
 [ ] create doc via DTO (zod?)
 [x] execute middlewares. Pass in decorator Http?
 [ ] remove dependencies to start server unnecessary (ts-node, ts-node-dev, vite-node)

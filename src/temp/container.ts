@@ -17,6 +17,11 @@ DependencyContainer.registerValue('SentryConfig', {
   environment: 'production',
 })
 
+DependencyContainer.registerValue('DiscordConfig', {
+  dsn: env.DISCORD_WEBHOOK_URL,
+  environment: 'production',
+})
+
 DependencyContainer.register('IErrorNotifier', NotificationErrorInMemory, {
   singleton: true,
 })

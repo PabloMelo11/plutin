@@ -1,6 +1,6 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import { z } from 'zod';
+import { z } from 'zod'
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['test', 'development', 'production']).default('production'),
@@ -9,15 +9,16 @@ const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().default(3333),
   SHOULD_NOTIFY_ERROR: z.coerce.boolean().default(true),
-  SENTRY_DSN: z.string().optional()
-});
+  SENTRY_DSN: z.string().optional(),
+  DISCORD_WEBHOOK_URL: z.string().optional(),
+})
 
-const _env = envSchema.safeParse(process.env);
+const _env = envSchema.safeParse(process.env)
 
 if (_env.success === false) {
-  console.error('❌ Invalid environment variables.', _env.error.format());
+  console.error('❌ Invalid environment variables.', _env.error.format())
 
-  throw new Error('Invalid environment variables.');
+  throw new Error('Invalid environment variables.')
 }
 
-export const env = _env.data;
+export const env = _env.data
