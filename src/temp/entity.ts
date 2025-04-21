@@ -1,7 +1,7 @@
 import type { CommonDTO } from '../core/entities/common-dto'
 import { Entity } from '../core/entities/entity'
+import type { Optional } from '../core/entities/optional'
 import { UniqueEntityId } from '../core/entities/unique-entity-id'
-import type { Optional } from '../core/types/optional'
 
 type Props = {
   id: UniqueEntityId
