@@ -31,7 +31,7 @@ export default class ExpressAdapter implements IHttp {
             headers: request.headers,
             query: request.query,
           }
-          const output = await controllerClass.handle(requestData)
+          const output = await controllerClass.execute(requestData)
           response
             .status(output.code || 204)
             .json(output.data || { code: ErrorResponseCode.NO_CONTENT_BODY })

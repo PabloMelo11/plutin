@@ -41,7 +41,7 @@ Headers -	kebab-case (lowercase)
 [ ] publish in npm (automatic)
 [x] adapters (express, fastify)
 [x] controller decorator
-[ ] create validator (sync)
+[x] create validator (sync)
 [ ] replace dependencies in test env
 [ ] create namespace use-case to use controller 
 [ ] DDD

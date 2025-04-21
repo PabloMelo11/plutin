@@ -33,7 +33,7 @@ export default class FastifyAdapter implements IHttp {
             query: request.query,
           } as Request
 
-          const output = await controllerClass.handle(requestData)
+          const output = await controllerClass.execute(requestData)
           return reply.status(output.code || 200).send(
             output.data || {
               code: ErrorResponseCode.NO_CONTENT_BODY,

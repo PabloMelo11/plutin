@@ -3,6 +3,7 @@ import { ZodObject, ZodEffects, type ZodError } from 'zod';
 import IValidationHTTP, { RequestHttp } from '../../../../core/http/validator';
 import ZodMapError from './zod-map-error';
 import ValidationError from 'core/errors/validation-error';
+import { zodValidator } from './zod-validator';
 
 type SchemaDefinition = {
   headers: ZodObject<Record<string, any>>;
@@ -85,3 +86,5 @@ export default class ZodValidator implements IValidationHTTP {
     } as T;
   }
 }
+
+export { zodValidator };

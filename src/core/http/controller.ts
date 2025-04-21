@@ -1,8 +1,11 @@
+import 'reflect-metadata'
+
 import ApplicationError from '../../core/errors/application-error'
 import ConflictError from '../../core/errors/conflict-error'
 import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
+import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
 
 export type AnyObject = Record<string, any>
 
@@ -96,6 +99,23 @@ export default abstract class BaseController {
         message: 'Server failed. Contact the administrator!',
         reason: error,
       },
+    }
+  }
+
+  public async execute(request: Request): Promise<Response> {
+    try {
+      const routeMetadata = Reflect.getMetadata('route', this.constructor);
+      const middlewares: MiddlewareFunction[] = routeMetadata?.middlewares || [];
+      
+      let processedRequest = request;
+
+      for (const middleware of middlewares) {
+        processedRequest = await middleware(processedRequest);
+      }
+      
+      return await this.handle(processedRequest);
+    } catch (error) {
+      return this.failure(error as Error);
     }
   }
 }
