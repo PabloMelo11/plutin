@@ -7,7 +7,6 @@ import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
-import { env } from '../../infra/env'
 import IErrorNotifier from './error-notifier'
 
 export type AnyObject = Record<string, any>
@@ -81,7 +80,7 @@ export default abstract class BaseController {
 
   protected buildContextError(request: Request): ContextError {
     return {
-      env: env.ENVIRONMENT,
+      env: process.env.ENVIRONMENT as string,
       request: {
         body: request.body,
         headers: request.headers,
@@ -133,7 +132,7 @@ export default abstract class BaseController {
       }
     }
 
-    if (env.SHOULD_NOTIFY_ERROR) {
+    if (process.env.SHOULD_NOTIFY_ERROR) {
       await this.errorNotifier.notify(error, context)
     }
 

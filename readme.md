@@ -23,6 +23,9 @@ O CI entra em ação e publica a versão 1.2.0 no NPM.
 
 ### Semantic Versioning
 
+1 command: npm version ?
+2 command: git push origin master --follow-tags
+
 Formato: MAJOR.MINOR.PATCH
 
 Quando usar

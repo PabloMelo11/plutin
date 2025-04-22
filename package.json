@@ -7,7 +7,7 @@
     "access": "public"
   },
   "exports": {
-    ".": "./dist/core/index.js",
+    ".": "./dist/index.js",
     "./core": {
       "import": "./dist/core/index.js",
       "types": "./dist/core/index.d.ts"
@@ -18,8 +18,8 @@
     }
   },
   "type": "module",
-  "main": "./dist/core/index.js",
-  "types": "./dist/core/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],

@@ -3,7 +3,6 @@ import express, { Express, Request, Response } from 'express'
 
 import type BaseController from '../../../core/http/base-controller'
 import type IHttp from '../../../core/http/http'
-import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
@@ -11,7 +10,7 @@ export default class ExpressAdapter implements IHttp {
   readonly instance: Express
   private server: any
 
-  constructor(readonly envs: Record<string, unknown>) {
+  constructor(readonly env: Record<string, any>) {
     this.instance = express()
     this.instance.use(cors())
     this.instance.use(express.json({ limit: '10mb' }))
@@ -39,7 +38,7 @@ export default class ExpressAdapter implements IHttp {
             .json(output.data || { code: ErrorResponseCode.NO_CONTENT_BODY })
         } catch (err: any) {
           const error = await controllerClass.failure(err, {
-            env: env.ENVIRONMENT,
+            env: this.env.ENVIRONMENT,
             request: {
               body: requestData.body,
               headers: requestData.headers,

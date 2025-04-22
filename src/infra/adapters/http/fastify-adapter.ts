@@ -4,14 +4,13 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
 import BaseController, { Request } from '../../../core/http/base-controller'
-import { env } from '../../../infra/env'
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
 export default class FastifyAdapter implements IHttp {
   readonly instance: FastifyInstance
 
-  constructor(readonly envs: Record<string, unknown>) {
+  constructor(readonly env: Record<string, any>) {
     this.instance = fastify({
       bodyLimit: 10 * 1024 * 1024,
       querystringParser: (str) => qs.parse(str),
@@ -42,7 +41,7 @@ export default class FastifyAdapter implements IHttp {
           )
         } catch (err: any) {
           const error = await controllerClass.failure(err, {
-            env: env.ENVIRONMENT,
+            env: this.env.ENVIRONMENT,
             request: {
               body: requestData.body,
               headers: requestData.headers,
@@ -65,7 +64,7 @@ export default class FastifyAdapter implements IHttp {
   async startServer(port: number): Promise<void> {
     await this.instance.listen({ port })
 
-    if (this.envs.NODE_ENV !== 'test') {
+    if (this.env.NODE_ENV !== 'test') {
       console.log(`🚀  Server is running on PORT ${port}`)
     }
   }
