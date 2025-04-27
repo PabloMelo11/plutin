@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-import DependencyContainer from '../../core/decorators/dependency-container'
+import { DependencyContainer } from '../../core/decorators/dependency-container'
 import ApplicationError from '../../core/errors/application-error'
 import ConflictError from '../../core/errors/conflict-error'
 import DomainError from '../../core/errors/domain-error'
@@ -9,7 +9,7 @@ import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
 import IErrorNotifier from './error-notifier'
 
-export type AnyObject = Record<string, any>
+type AnyObject = Record<string, any>
 
 export type Request = {
   body: AnyObject
@@ -41,7 +41,7 @@ export type ContextError = {
   }
 }
 
-export default abstract class BaseController {
+export abstract class BaseController {
   protected readonly errorNotifier: IErrorNotifier
 
   abstract handle<T>(request: T | Request): Promise<Response>

@@ -6,7 +6,7 @@ type Registration =
   | { type: 'class'; myClass: Class; singleton: boolean }
   | { type: 'value'; value: any }
 
-export default class DependencyContainer {
+export class DependencyContainer {
   static registry = new Map<string, Registration>()
   static singletons = new Map<string, any>()
 

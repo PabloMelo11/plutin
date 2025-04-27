@@ -1,9 +1,11 @@
 import { CommonDTO } from './common-dto'
 import { UniqueEntityId } from './unique-entity-id'
 
-export abstract class Entity<Props extends CommonDTO> {
+type PropsWithCommonDTO<Props> = Props & CommonDTO
+
+export abstract class Entity<Props> {
   private _id: UniqueEntityId
-  protected props: Props
+  protected props: PropsWithCommonDTO<Props>
 
   get id() {
     return this._id
@@ -29,7 +31,7 @@ export abstract class Entity<Props extends CommonDTO> {
     this.props.updatedAt = new Date()
   }
 
-  protected constructor(props: Props, id?: UniqueEntityId) {
+  protected constructor(props: PropsWithCommonDTO<Props>, id?: UniqueEntityId) {
     this._id = id ?? new UniqueEntityId(id)
     this.props = props
   }

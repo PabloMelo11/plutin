@@ -1,4 +1,4 @@
-import type BaseController from './base-controller'
+import type { BaseController } from './base-controller'
 
 export type MethodType = 'get' | 'post' | 'delete' | 'put' | 'patch'
 
