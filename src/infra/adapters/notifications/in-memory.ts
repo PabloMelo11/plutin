@@ -1,7 +1,7 @@
 import type { ContextError } from '../../../core/http/base-controller'
 import type IErrorNotifier from '../../../core/http/error-notifier'
 
-export default class NotificationErrorInMemory implements IErrorNotifier {
+export class NotificationErrorInMemory implements IErrorNotifier {
   public errors: any[] = []
 
   async notify(error: Error, context?: ContextError): Promise<void> {

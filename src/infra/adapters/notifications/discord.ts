@@ -9,7 +9,7 @@ type DiscordOptions = {
   env: string
 }
 
-export default class DiscordNotifier implements IErrorNotifier {
+export class DiscordNotifier implements IErrorNotifier {
   private webhook: Webhook
 
   constructor(
