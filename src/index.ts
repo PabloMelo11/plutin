@@ -22,6 +22,7 @@ export * from './core/errors/infra-error'
 // core http
 export * from './core/http/base-controller'
 export * from './core/http/dto-response'
+export * from './core/http/error-notifier'
 export * from './core/http/get-take-and-skip'
 export * from './core/http/health-connections'
 export * from './core/http/pagination'

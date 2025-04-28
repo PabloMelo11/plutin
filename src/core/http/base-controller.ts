@@ -7,7 +7,7 @@ import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
-import IErrorNotifier from './error-notifier'
+import { IErrorNotifier } from './error-notifier'
 
 type AnyObject = Record<string, any>
 

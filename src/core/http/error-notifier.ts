@@ -1,5 +1,5 @@
 import type { ContextError } from './base-controller'
 
-export default interface IErrorNotifier {
+export interface IErrorNotifier {
   notify(error: Error, context: ContextError): Promise<void>
 }

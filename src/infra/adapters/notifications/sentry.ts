@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node'
 import type { ContextError } from 'core/http/base-controller'
 
 import { Inject } from '../../../core/decorators/dependency-container'
-import IErrorNotifier from '../../../core/http/error-notifier'
+import { IErrorNotifier } from '../../../core/http/error-notifier'
 
 type SentryOptions = {
   dsn: string
