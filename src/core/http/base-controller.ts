@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-
 import { DependencyContainer } from '../../core/decorators/dependency-container'
 import ApplicationError from '../../core/errors/application-error'
 import ConflictError from '../../core/errors/conflict-error'
@@ -7,7 +5,10 @@ import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
+
 import { IErrorNotifier } from './error-notifier'
+
+import 'reflect-metadata'
 
 type AnyObject = Record<string, any>
 

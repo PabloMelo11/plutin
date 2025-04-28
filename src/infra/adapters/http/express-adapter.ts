@@ -3,10 +3,11 @@ import express, { Express, Request, Response } from 'express'
 
 import type { BaseController } from '../../../core/http/base-controller'
 import type IHttp from '../../../core/http/http'
+
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
-export default class ExpressAdapter implements IHttp {
+export class ExpressAdapter implements IHttp {
   readonly instance: Express
   private server: any
 

@@ -4,10 +4,11 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
 import { BaseController, Request } from '../../../core/http/base-controller'
+
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
 
-export default class FastifyAdapter implements IHttp {
+export class FastifyAdapter implements IHttp {
   readonly instance: FastifyInstance
 
   constructor(readonly env: Record<string, any>) {

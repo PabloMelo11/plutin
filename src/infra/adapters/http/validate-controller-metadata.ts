@@ -1,7 +1,7 @@
-import 'reflect-metadata'
-
 import { BaseController } from '../../../core/http/base-controller'
 import type { MethodType } from '../../../core/http/http'
+
+import 'reflect-metadata'
 
 export function validateControllerMetadata(controller: BaseController) {
   const metadata = Reflect.getMetadata('route', controller.constructor) as {

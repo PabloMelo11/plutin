@@ -21,7 +21,6 @@ export default [
       prettier: eslintPluginPrettier,
     },
     rules: {
-      'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       'prettier/prettier': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -34,6 +33,17 @@ export default [
             regex: '^I[A-Z]',
             match: true,
           },
+        },
+      ],
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^@?\\w'],
+            ['^(@core|@infra)(/.*|$)'],
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+          ],
         },
       ],
     },

@@ -7,15 +7,7 @@
     "access": "public"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./core": {
-      "import": "./dist/core/index.js",
-      "types": "./dist/core/index.d.ts"
-    },
-    "./infra": {
-      "import": "./dist/infra/index.js",
-      "types": "./dist/infra/index.d.ts"
-    }
+    ".": "./dist/index.js"
   },
   "type": "module",
   "main": "./dist/index.js",

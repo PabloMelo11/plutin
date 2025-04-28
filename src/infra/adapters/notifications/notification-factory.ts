@@ -1,6 +1,7 @@
 import type { z } from 'zod'
 
 import type { baseEnvSchema } from '../../env'
+
 import { DiscordNotifier } from './discord'
 import { NotificationErrorInMemory } from './in-memory'
 import { SentryNotifier } from './sentry'
