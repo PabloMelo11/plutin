@@ -35,6 +35,7 @@ export * from './infra/adapters/http/fastify-adapter'
 // infra adapters notifications
 export * from './infra/adapters/notifications/discord'
 export * from './infra/adapters/notifications/in-memory'
+export * from './infra/adapters/notifications/notification-factory'
 export * from './infra/adapters/notifications/sentry'
 
 // infra adapters validations
