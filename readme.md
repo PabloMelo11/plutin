@@ -44,7 +44,7 @@ Headers - kebab-case (lowercase)
 
 ### Steps
 
-[ ] publish in npm (automatic)
+[x] publish in npm (automatic)
 [x] adapters (express, fastify)
 [x] controller decorator
 [x] create validator (sync)

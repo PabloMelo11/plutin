@@ -1,5 +1,5 @@
+import { BaseController } from '../../core/http/base-controller'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
-import { BaseController } from '../http/base-controller'
 import type { MethodType } from '../http/http'
 
 type Props = {
