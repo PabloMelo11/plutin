@@ -7,11 +7,12 @@
     "access": "public"
   },
   "exports": {
-    ".": "./dist/index.js"
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
   },
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/esm/index.d.ts",
   "files": [
     "dist"
   ],
@@ -19,7 +20,7 @@
   "author": "Pablo",
   "license": "ISC",
   "scripts": {
-    "build": "tsup src --format cjs,esm --dts",
+    "build": "tsup",
     "prepare:husky": "husky install",
     "eslint:fix": "npx eslint --fix src/**/*.ts",
     "prettier:format": "prettier --write src/**/*.ts",

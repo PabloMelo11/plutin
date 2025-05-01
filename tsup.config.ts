@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['esm'],
+  format: ['esm', 'cjs'],
   outDir: 'dist',
   dts: true,
   clean: true,
@@ -11,11 +11,9 @@ export default defineConfig({
   target: 'es2022',
   minify: false,
   tsconfig: './tsconfig.build.json',
-  esbuildOptions(options) {
-    options.alias = {
-      '@controllers': './src/controllers',
-      '@services': './src/services',
-      '@utils': './src/utils',
+  outExtension({ format }) {
+    return {
+      js: format === 'esm' ? '.mjs' : '.cjs',
     }
   },
 })
