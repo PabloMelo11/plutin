@@ -6,9 +6,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "exports": {
+  ".": {
     "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs"
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
   },
   "type": "module",
   "main": "./dist/index.js",
