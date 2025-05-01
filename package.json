@@ -7,12 +7,12 @@
     "access": "public"
   },
   "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
   },
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
