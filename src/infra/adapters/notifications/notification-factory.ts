@@ -10,7 +10,6 @@ type OptionsNotifications = 'console' | 'discord' | 'sentry'
 type EnvironmentEnum = z.infer<typeof baseEnvSchema>['ENVIRONMENT']
 
 type Props = {
-  local?: OptionsNotifications
   test?: OptionsNotifications
   development?: OptionsNotifications
   staging?: OptionsNotifications
@@ -20,10 +19,10 @@ type Props = {
 export class NotificationFactory {
   static define(env: EnvironmentEnum, definitions?: Props): any {
     const defaultDefinition = {
-      test: this.defineProvider(definitions?.local ?? 'console'),
-      development: this.defineProvider(definitions?.local ?? 'console'),
-      staging: this.defineProvider(definitions?.local ?? 'discord'),
-      production: this.defineProvider(definitions?.local ?? 'sentry'),
+      test: this.defineProvider(definitions?.test ?? 'console'),
+      development: this.defineProvider(definitions?.development ?? 'console'),
+      staging: this.defineProvider(definitions?.staging ?? 'discord'),
+      production: this.defineProvider(definitions?.production ?? 'sentry'),
     }
 
     return defaultDefinition[env]

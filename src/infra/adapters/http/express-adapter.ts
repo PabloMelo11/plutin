@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from 'express'
 
 import type { BaseController } from '../../../core/http/base-controller'
 import type IHttp from '../../../core/http/http'
+import { logger } from '../../logger'
 
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
@@ -62,7 +63,7 @@ export class ExpressAdapter implements IHttp {
   async startServer(port: number): Promise<void> {
     return new Promise((resolve) => {
       this.server = this.instance.listen(port, () => {
-        console.log(`🚀 Server is running on PORT ${port}`)
+        logger.log(`Server is running on PORT ${port}`)
         resolve()
       })
     })

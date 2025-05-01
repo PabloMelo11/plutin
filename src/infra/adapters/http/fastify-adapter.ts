@@ -4,6 +4,7 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
 import { BaseController, Request } from '../../../core/http/base-controller'
+import { logger } from '../../logger'
 
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
@@ -66,7 +67,7 @@ export class FastifyAdapter implements IHttp {
     await this.instance.listen({ port })
 
     if (this.env.NODE_ENV !== 'test') {
-      console.log(`🚀  Server is running on PORT ${port}`)
+      logger.log(`Server is running on PORT ${port}`)
     }
   }
 
