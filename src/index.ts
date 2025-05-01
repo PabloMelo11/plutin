@@ -42,5 +42,6 @@ export * from './infra/adapters/notifications/sentry'
 // infra adapters validations
 export * from './infra/adapters/validators/zod/zod-validator'
 
-// infra common env
+// infra common
 export * from './infra/env'
+export * from './infra/logger'
