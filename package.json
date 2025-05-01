@@ -1,6 +1,6 @@
 {
   "name": "plutin",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Plutin lib",
   "private": false,
   "publishConfig": {
