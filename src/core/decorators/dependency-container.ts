@@ -27,20 +27,18 @@ export class DependencyContainer {
   }
 
   static resolve<T>(target: Class<T>): T {
-    const paramTypes = Reflect.getMetadata('design:paramtypes', target) || []
-
     const injectMetadata: Record<number, string> =
       Reflect.getOwnMetadata('inject:params', target) || {}
 
-    const params = paramTypes.map((_: any, index: number) => {
-      const token = injectMetadata[index]
+    const paramCount = Object.keys(injectMetadata).length
 
+    const params = Array.from({ length: paramCount }, (_, index) => {
+      const token = injectMetadata[index]
       if (!token) {
         throw new Error(
           `Missing @Inject token for parameter index ${index} in ${target.name}`
         )
       }
-
       return this.resolveToken(token)
     })
 
