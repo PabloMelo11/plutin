@@ -1,19 +1,19 @@
-import chalk from 'chalk'
+import { bold } from 'kleur'
 
 export const logger = {
   info: (...args: any[]) => {
-    console.info(chalk.blue(`[INFO] `), ...args)
+    console.info(bold().blue(`[INFO] `), ...args)
   },
 
   log: (...args: any[]) => {
-    console.log(chalk.green(`[LOG] `), ...args)
+    console.log(bold().grey(`[LOG] `), ...args)
   },
 
   warn: (...args: any[]) => {
-    console.warn(chalk.yellow(`[WARN] `), ...args)
+    console.warn(bold().yellow(`[WARN] `), ...args)
   },
 
   error: (...args: any[]) => {
-    console.error(chalk.red(`[ERROR] `), ...args)
+    console.error(bold().red(`[ERROR] `), ...args)
   },
 }

@@ -65,11 +65,11 @@
   "dependencies": {
     "@fastify/cors": "11.0.1",
     "@sentry/node": "9.13.0",
-    "chalk": "5.4.1",
     "cors": "2.8.5",
     "discord-webhook-node": "1.1.8",
     "express": "5.1.0",
     "fastify": "5.2.2",
+    "kleur": "4.1.5",
     "qs": "6.14.0",
     "reflect-metadata": "0.2.2",
     "zod": "3.24.3"
