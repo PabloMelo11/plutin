@@ -2,7 +2,7 @@ import cors from 'cors'
 import express, { Express, Request, Response } from 'express'
 
 import type { BaseController } from '../../../core/http/base-controller'
-import type IHttp from '../../../core/http/http'
+import { IHttp } from '../../../core/http/http'
 import { logger } from '../../logger'
 
 import { ErrorResponseCode } from './response-error-code'

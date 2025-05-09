@@ -1,5 +1,5 @@
 import cors from '@fastify/cors'
-import type IHttp from 'core/http/http'
+import { IHttp } from 'core/http/http'
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 

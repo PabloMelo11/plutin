@@ -26,6 +26,7 @@ export * from './core/http/dto-response'
 export * from './core/http/error-notifier'
 export * from './core/http/get-take-and-skip'
 export * from './core/http/health-connections'
+export * from './core/http/http'
 export * from './core/http/pagination'
 export * from './core/http/validator'
 
