@@ -1,3 +1,6 @@
+// core configs
+export * from './core/configs/global-error-handler'
+
 // core decorators
 export * from './core/decorators/controller-http-decorator'
 export * from './core/decorators/dependency-container'
