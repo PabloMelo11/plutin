@@ -15,6 +15,22 @@ export abstract class EntityObject<Props> {
     this._id = id
   }
 
+  get createdAt() {
+    return this.props.createdAt
+  }
+
+  set createdAt(date: Date) {
+    this.props.createdAt = date
+  }
+
+  get updatedAt(): Date | undefined | null {
+    return this.props.updatedAt
+  }
+
+  public touch() {
+    this.props.updatedAt = new Date()
+  }
+
   protected constructor(
     props: PropsWithCommonDTO<Props>,
     id?: UniqueObjectUniqueId
