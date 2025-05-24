@@ -1,22 +1,25 @@
 import type { CommonDTO } from './common-dto'
-import ObjectUniqueId from './object-id'
+import { UniqueObjectUniqueId } from './unique-object-id'
 
 type PropsWithCommonDTO<Props> = Props & CommonDTO
 
 export abstract class EntityObject<Props> {
-  private _id: ObjectUniqueId
+  private _id: UniqueObjectUniqueId
   protected props: PropsWithCommonDTO<Props>
 
   get id() {
     return this._id
   }
 
-  set id(id: ObjectUniqueId) {
+  set id(id: UniqueObjectUniqueId) {
     this._id = id
   }
 
-  protected constructor(props: PropsWithCommonDTO<Props>, id?: ObjectUniqueId) {
-    this._id = id ?? new ObjectUniqueId(id)
+  protected constructor(
+    props: PropsWithCommonDTO<Props>,
+    id?: UniqueObjectUniqueId
+  ) {
+    this._id = id ?? new UniqueObjectUniqueId(id)
     this.props = props
   }
 

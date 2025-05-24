@@ -1,6 +1,6 @@
 import { ObjectId } from 'bson'
 
-export default class ObjectUniqueId {
+export class UniqueObjectUniqueId {
   private value: ObjectId
 
   constructor(value?: string) {
@@ -15,7 +15,7 @@ export default class ObjectUniqueId {
     return this.value.toString()
   }
 
-  public equals(id: ObjectUniqueId) {
+  public equals(id: UniqueObjectUniqueId) {
     return id.toValue() === this.toValue()
   }
 }

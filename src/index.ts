@@ -6,15 +6,16 @@ export * from './core/decorators/controller-http-decorator'
 export * from './core/decorators/dependency-container'
 
 // core entities
+export * from './core/entities/aggregate-object-root'
 export * from './core/entities/aggregate-root'
 export * from './core/entities/common-dto'
 export * from './core/entities/domain-event'
 export * from './core/entities/entity'
 export * from './core/entities/entity-object'
-export * from './core/entities/object-id'
 export * from './core/entities/optional'
 export * from './core/entities/replace'
 export * from './core/entities/unique-entity-id'
+export * from './core/entities/unique-object-id'
 export * from './core/entities/value-object'
 export * from './core/entities/watched-list'
 
