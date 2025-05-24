@@ -31,7 +31,8 @@
     "test:coverage": "vitest run --coverage",
     "prepare": "npm run build",
     "check:prepublish": "npm run eslint:fix && npm run prettier:format && npm run test",
-    "prepublishOnly": "npm run check:prepublish"
+    "prepublishOnly": "npm run check:prepublish",
+    "git:publish": "git push origin master --follow-tags"
   },
   "lint-staged": {
     "*.ts": [
