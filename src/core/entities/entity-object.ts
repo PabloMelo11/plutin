@@ -1,17 +1,17 @@
 import type { CommonDTO } from './common-dto'
-import { UniqueObjectUniqueId } from './unique-object-id'
+import { UniqueObjectId } from './unique-object-id'
 
 type PropsWithCommonDTO<Props> = Props & CommonDTO
 
 export abstract class EntityObject<Props> {
-  private _id: UniqueObjectUniqueId
+  private _id: UniqueObjectId
   protected props: PropsWithCommonDTO<Props>
 
   get id() {
     return this._id
   }
 
-  set id(id: UniqueObjectUniqueId) {
+  set id(id: UniqueObjectId) {
     this._id = id
   }
 
@@ -31,11 +31,8 @@ export abstract class EntityObject<Props> {
     this.props.updatedAt = new Date()
   }
 
-  protected constructor(
-    props: PropsWithCommonDTO<Props>,
-    id?: UniqueObjectUniqueId
-  ) {
-    this._id = id ?? new UniqueObjectUniqueId(id)
+  protected constructor(props: PropsWithCommonDTO<Props>, id?: UniqueObjectId) {
+    this._id = id ?? new UniqueObjectId(id)
     this.props = props
   }
 
