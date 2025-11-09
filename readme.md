@@ -57,3 +57,9 @@ Headers - kebab-case (lowercase)
 [x] execute middlewares. Pass in decorator Http?
 [ ] remove dependencies to start server unnecessary (ts-node, ts-node-dev, vite-node)
 [ ] 100% coverage tests
+
+Otel
+
+- tracer deveria ser desdo inicio da requisicao
+- devemos verificar se ja existe um traceId vindo da request
+- pensar se o trace deveria passar em controller -> use case -> gateway
