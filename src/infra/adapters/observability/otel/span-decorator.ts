@@ -31,7 +31,7 @@ export function Span(): MethodDecorator {
           if (result instanceof Promise) {
             try {
               const awaitedResult = await result
-              span.addEvent(`Method ${methodName} executed successfully`)
+              span.addEvent(`Method [${methodName}] executed successfully`)
               span.end()
               return awaitedResult
             } catch (error) {
@@ -39,7 +39,7 @@ export function Span(): MethodDecorator {
               throw error
             }
           } else {
-            span.addEvent('Method executed successfully')
+            span.addEvent(`Method [${methodName}] executed successfully`)
             span.end()
             return result
           }
