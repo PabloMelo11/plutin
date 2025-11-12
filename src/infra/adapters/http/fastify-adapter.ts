@@ -12,10 +12,14 @@ import { validateControllerMetadata } from './validate-controller-metadata'
 export class FastifyAdapter implements IHttp {
   readonly instance: FastifyInstance
 
-  constructor(readonly env: Record<string, any>) {
+  constructor(
+    readonly env: Record<string, any>,
+    readonly logger: any
+  ) {
     this.instance = fastify({
       bodyLimit: 10 * 1024 * 1024,
       querystringParser: (str) => qs.parse(str),
+      logger: env.ENVIRONMENT !== 'test' ? logger : false,
     })
 
     this.instance.register(cors)
