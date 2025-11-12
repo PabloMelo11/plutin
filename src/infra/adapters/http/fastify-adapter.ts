@@ -19,7 +19,7 @@ export class FastifyAdapter implements IHttp {
     this.instance = fastify({
       bodyLimit: 10 * 1024 * 1024,
       querystringParser: (str) => qs.parse(str),
-      logger: env.ENVIRONMENT !== 'test' ? logger : false,
+      loggerInstance: env.ENVIRONMENT !== 'test' ? logger : false,
     })
 
     this.instance.register(cors)
