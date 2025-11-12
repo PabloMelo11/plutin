@@ -3,7 +3,9 @@ import { Logger, logs, SeverityNumber } from '@opentelemetry/api-logs'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import winston from 'winston'
 
-class WinstonOtelFastify {
+import type { ILogger } from './logger'
+
+class WinstonOtelFastify implements ILogger {
   logger: Logger
   consoleLogger: winston.Logger
   level: 'info' | 'error' | 'debug' | 'fatal' | 'warn' = 'info'
