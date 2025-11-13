@@ -11,7 +11,7 @@ class WinstonOtelFastify implements ILogger {
   level: 'info' | 'error' | 'debug' | 'fatal' | 'warn' = 'info'
 
   constructor(private readonly env: Record<string, any>) {
-    if (env.OTEL_ENABLE) {
+    if (this.env.OTEL_ENABLE) {
       this.logger = logs.getLogger(
         this.env.OTEL_SERVICE_NAME,
         this.env.OTEL_SERVICE_VERSION
