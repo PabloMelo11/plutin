@@ -10,16 +10,17 @@ class WinstonOtelFastify implements ILogger {
   consoleLogger: winston.Logger
   level: 'info' | 'error' | 'debug' | 'fatal' | 'warn' = 'info'
 
-  constructor(private readonly env: Record<string, any>) {
-    if (this.env.OTEL_ENABLE) {
+  constructor() {
+    if (process.env.OTEL_ENABLE) {
       this.logger = logs.getLogger(
-        this.env.OTEL_SERVICE_NAME,
-        this.env.OTEL_SERVICE_VERSION
+        process.env.OTEL_SERVICE_NAME!,
+        process.env.OTEL_SERVICE_VERSION
       )
-      this.level = this.env.LOG_LEVEL
+
+      this.level = process.env.LOG_LEVEL as any
 
       const transports =
-        this.env.NODE_ENV === 'test'
+        process.env.NODE_ENV === 'test'
           ? [new winston.transports.Console({ silent: true })]
           : [new winston.transports.Console()]
 
@@ -28,7 +29,7 @@ class WinstonOtelFastify implements ILogger {
         format: winston.format.combine(
           winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
           winston.format((info) => {
-            if (this.env.NODE_ENV !== 'test') {
+            if (process.env.NODE_ENV !== 'test') {
               const span = opentelemetry.trace.getActiveSpan()
 
               if (span) {
@@ -97,7 +98,7 @@ class WinstonOtelFastify implements ILogger {
 
     this.consoleLogger[severityText.toLowerCase() as keyof Logger](message)
 
-    if (this.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'test') {
       this.logger.emit({
         body: message,
         severityNumber,
@@ -127,7 +128,7 @@ class WinstonOtelFastify implements ILogger {
   }
 
   trace(message: string) {
-    if (this.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'test') {
       this.logger.emit({
         body: message,
         severityNumber: SeverityNumber.TRACE,
@@ -137,7 +138,7 @@ class WinstonOtelFastify implements ILogger {
   }
 
   child(): WinstonOtelFastify {
-    return new WinstonOtelFastify(process.env)
+    return new WinstonOtelFastify()
   }
 }
 
