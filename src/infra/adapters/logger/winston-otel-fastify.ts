@@ -6,53 +6,48 @@ import winston from 'winston'
 import type { ILogger } from './logger'
 
 class WinstonOtelFastify implements ILogger {
-  logger: Logger
+  logger: Logger | null = null
   consoleLogger: winston.Logger
   level: 'info' | 'error' | 'debug' | 'fatal' | 'warn' = 'info'
 
+  private otelEnabled: boolean
+
   constructor() {
-    if (process.env.OTEL_ENABLE) {
+    this.otelEnabled = process.env.OTEL_ENABLE === 'true'
+    this.level = (process.env.LOG_LEVEL as any) || 'info'
+
+    if (this.otelEnabled) {
       this.logger = logs.getLogger(
-        process.env.OTEL_SERVICE_NAME!,
-        process.env.OTEL_SERVICE_VERSION
+        process.env.OTEL_SERVICE_NAME || 'default-service',
+        process.env.OTEL_SERVICE_VERSION || '1.0.0'
       )
-
-      this.level = process.env.LOG_LEVEL as any
-
-      const transports =
-        process.env.NODE_ENV === 'test'
-          ? [new winston.transports.Console({ silent: true })]
-          : [new winston.transports.Console()]
-
-      this.consoleLogger = winston.createLogger({
-        level: this.level,
-        format: winston.format.combine(
-          winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-          winston.format((info) => {
-            if (process.env.NODE_ENV !== 'test') {
-              const span = opentelemetry.trace.getActiveSpan()
-
-              if (span) {
-                info.spanId = span.spanContext().spanId
-                info.traceId = span.spanContext().traceId
-              }
-            }
-
-            return info
-          })(),
-          winston.format.json()
-        ),
-        transports,
-      })
-    } else {
-      this.consoleLogger = winston.createLogger({
-        level: this.level,
-        format: winston.format.combine(
-          winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-          winston.format.json()
-        ),
-      })
     }
+
+    const transports =
+      process.env.NODE_ENV === 'test'
+        ? [new winston.transports.Console({ silent: true })]
+        : [new winston.transports.Console()]
+
+    this.consoleLogger = winston.createLogger({
+      level: this.level,
+      format: winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
+        winston.format((info) => {
+          if (this.otelEnabled && process.env.NODE_ENV !== 'test') {
+            const span = opentelemetry.trace.getActiveSpan()
+
+            if (span) {
+              info.spanId = span.spanContext().spanId
+              info.traceId = span.spanContext().traceId
+            }
+          }
+
+          return info
+        })(),
+        winston.format.json()
+      ),
+      transports,
+    })
   }
 
   private bodyIsFastifyRequest(
@@ -98,7 +93,7 @@ class WinstonOtelFastify implements ILogger {
 
     this.consoleLogger[severityText.toLowerCase() as keyof Logger](message)
 
-    if (process.env.NODE_ENV !== 'test') {
+    if (this.otelEnabled && this.logger && process.env.NODE_ENV !== 'test') {
       this.logger.emit({
         body: message,
         severityNumber,
@@ -128,7 +123,9 @@ class WinstonOtelFastify implements ILogger {
   }
 
   trace(message: string) {
-    if (process.env.NODE_ENV !== 'test') {
+    this.consoleLogger.debug(message)
+
+    if (this.otelEnabled && this.logger && process.env.NODE_ENV !== 'test') {
       this.logger.emit({
         body: message,
         severityNumber: SeverityNumber.TRACE,
