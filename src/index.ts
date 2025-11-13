@@ -49,9 +49,10 @@ export * from './infra/adapters/notifications/sentry'
 // infra adapters validations
 export * from './infra/adapters/validators/zod/zod-validator'
 
-// infra adapters observability
+// infra adapters observability]
 export * from './infra/adapters/logger/logger'
 export * from './infra/adapters/logger/winston-otel-fastify'
+export * from './infra/adapters/observability/otel/opentelemetry'
 export * from './infra/adapters/observability/otel/span-decorator'
 export * from './infra/adapters/observability/otel/tracer-gateway-opentelemetry'
 export * from './infra/adapters/observability/tracer-gateway'
