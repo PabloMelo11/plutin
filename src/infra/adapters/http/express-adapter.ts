@@ -3,7 +3,6 @@ import express, { Express, Request, Response } from 'express'
 
 import type { BaseController } from '../../../core/http/base-controller'
 import { IHttp } from '../../../core/http/http'
-import { logger } from '../../logger'
 
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
@@ -12,7 +11,10 @@ export class ExpressAdapter implements IHttp {
   readonly instance: Express
   private server: any
 
-  constructor(readonly env: Record<string, any>) {
+  constructor(
+    readonly env: Record<string, any>,
+    readonly logger: any
+  ) {
     this.instance = express()
     this.instance.use(cors())
     this.instance.use(express.json({ limit: '10mb' }))
@@ -63,7 +65,7 @@ export class ExpressAdapter implements IHttp {
   async startServer(port: number): Promise<void> {
     return new Promise((resolve) => {
       this.server = this.instance.listen(port, () => {
-        logger.log(`Server is running on PORT ${port}`)
+        this.logger.info(`Server is running on PORT ${port}`)
         resolve()
       })
     })
