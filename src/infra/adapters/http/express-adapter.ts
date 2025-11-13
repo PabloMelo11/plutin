@@ -13,7 +13,7 @@ export class ExpressAdapter implements IHttp {
 
   constructor(
     readonly env: Record<string, any>,
-    readonly logger: any
+    readonly logger?: any
   ) {
     this.instance = express()
     this.instance.use(cors())
@@ -65,7 +65,7 @@ export class ExpressAdapter implements IHttp {
   async startServer(port: number): Promise<void> {
     return new Promise((resolve) => {
       this.server = this.instance.listen(port, () => {
-        this.logger.info(`Server is running on PORT ${port}`)
+        this.logger?.info(`Server is running on PORT ${port}`)
         resolve()
       })
     })

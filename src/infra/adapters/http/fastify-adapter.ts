@@ -13,12 +13,12 @@ export class FastifyAdapter implements IHttp {
 
   constructor(
     readonly env: Record<string, any>,
-    readonly logger: any
+    readonly logger?: any
   ) {
     this.instance = fastify({
       bodyLimit: 10 * 1024 * 1024,
       querystringParser: (str) => qs.parse(str),
-      loggerInstance: env.ENVIRONMENT !== 'test' ? logger : false,
+      loggerInstance: env.ENVIRONMENT !== 'test' && logger ? logger : false,
     })
 
     this.instance.register(cors)
@@ -70,7 +70,7 @@ export class FastifyAdapter implements IHttp {
     await this.instance.listen({ port })
 
     if (this.env.NODE_ENV !== 'test') {
-      this.logger.info(`Server is running on PORT ${port}`)
+      this.logger?.info(`Server is running on PORT ${port}`)
     }
   }
 

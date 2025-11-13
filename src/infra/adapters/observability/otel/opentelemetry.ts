@@ -1,5 +1,3 @@
-import { W3CTraceContextPropagator } from '@opentelemetry/core'
-import { CompositePropagator } from '@opentelemetry/core'
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto'
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
@@ -18,27 +16,23 @@ class OpenTelemetry {
   sdk: NodeSDK
 
   constructor(private readonly env: Record<string, any>) {
-    // Configuração do Resource com atributos semânticos
     const resource = new Resource({
       [SEMRESATTRS_SERVICE_NAME]: this.env.OTEL_SERVICE_NAME,
       [SEMRESATTRS_SERVICE_VERSION]: this.env.OTEL_SERVICE_VERSION || '1.0.0',
       [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]:
-        this.env.ENVIRONMENT || 'development',
+        this.env.ENVIRONMENT || 'production',
     })
 
-    // Trace Exporter
     const traceExporter = new OTLPTraceExporter({
       url: this.env.OTEL_OTLP_TRACES_EXPORTER_URL,
       headers: {},
     })
 
-    // Log Exporter
     const logExporter = new OTLPLogExporter({
       url: this.env.OTEL_OTLP_LOGS_EXPORTER_URL,
       headers: {},
     })
 
-    // Metric Exporter
     const metricExporter = new OTLPMetricExporter({
       url: this.env.OTEL_OTLP_METRICS_EXPORTER_URL,
       headers: {},
@@ -47,25 +41,10 @@ class OpenTelemetry {
     this.sdk = new NodeSDK({
       resource,
       traceExporter,
-      textMapPropagator: new CompositePropagator({
-        propagators: [new W3CTraceContextPropagator()],
-      }),
-      spanProcessor: new BatchSpanProcessor(traceExporter, {
-        maxQueueSize: 2048,
-        maxExportBatchSize: 512,
-        scheduledDelayMillis: 5000,
-        exportTimeoutMillis: 30000,
-      }),
-      logRecordProcessor: new BatchLogRecordProcessor(logExporter, {
-        maxQueueSize: 2048,
-        maxExportBatchSize: 512,
-        scheduledDelayMillis: 1000,
-        exportTimeoutMillis: 30000,
-      }),
+      spanProcessor: new BatchSpanProcessor(traceExporter),
+      logRecordProcessor: new BatchLogRecordProcessor(logExporter),
       metricReader: new PeriodicExportingMetricReader({
         exporter: metricExporter,
-        exportIntervalMillis: 30000,
-        exportTimeoutMillis: 30000,
       }),
     })
   }
