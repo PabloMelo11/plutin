@@ -59,4 +59,3 @@ export * from './infra/adapters/observability/tracer-gateway'
 
 // infra common
 export * from './infra/env'
-export * from './infra/logger'

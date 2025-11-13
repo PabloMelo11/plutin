@@ -4,7 +4,6 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import qs from 'qs'
 
 import { BaseController, Request } from '../../../core/http/base-controller'
-import { logger } from '../../logger'
 
 import { ErrorResponseCode } from './response-error-code'
 import { validateControllerMetadata } from './validate-controller-metadata'
@@ -19,21 +18,10 @@ export class FastifyAdapter implements IHttp {
     this.instance = fastify({
       bodyLimit: 10 * 1024 * 1024,
       querystringParser: (str) => qs.parse(str),
-      logger: false,
-      disableRequestLogging: true,
+      loggerInstance: env.ENVIRONMENT !== 'test' ? logger : false,
     })
 
     this.instance.register(cors)
-
-    if (env.NODE_ENV !== 'test') {
-      this.instance.addHook('onRequest', async (request) => {
-        logger.info({ req: request })
-      })
-
-      this.instance.addHook('onResponse', async (_, reply) => {
-        logger.info({ res: reply })
-      })
-    }
   }
 
   registerRoute(controllerClass: BaseController): void {
@@ -82,7 +70,7 @@ export class FastifyAdapter implements IHttp {
     await this.instance.listen({ port })
 
     if (this.env.NODE_ENV !== 'test') {
-      logger.log(`Server is running on PORT ${port}`)
+      this.logger.info(`Server is running on PORT ${port}`)
     }
   }
 
