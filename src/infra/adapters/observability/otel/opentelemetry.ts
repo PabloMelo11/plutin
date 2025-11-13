@@ -64,7 +64,7 @@ class OpenTelemetry {
       }),
       metricReader: new PeriodicExportingMetricReader({
         exporter: metricExporter,
-        exportIntervalMillis: 10000,
+        exportIntervalMillis: 30000,
         exportTimeoutMillis: 30000,
       }),
     })
