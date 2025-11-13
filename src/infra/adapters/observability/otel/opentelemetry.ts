@@ -25,7 +25,13 @@ class OpenTelemetry {
       logRecordProcessor: new BatchLogRecordProcessor(
         new OTLPLogExporter({
           url: this.env.OTEL_OTLP_LOGS_EXPORTER_URL,
-        })
+        }),
+        {
+          maxQueueSize: 100,
+          maxExportBatchSize: 5,
+          scheduledDelayMillis: 1000,
+          exportTimeoutMillis: 30000,
+        }
       ),
       metricReader: new PeriodicExportingMetricReader({
         exporter: new OTLPMetricExporter({
