@@ -6,7 +6,7 @@ export class GlobalListener {
   protected readonly logger: ILogger
 
   constructor(private readonly callback: () => Promise<void>) {
-    this.logger = DependencyContainer.resolveToken('ILogger')
+    this.logger = DependencyContainer.resolveToken('Logger')
   }
 
   register() {

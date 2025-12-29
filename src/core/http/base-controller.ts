@@ -48,7 +48,7 @@ export abstract class BaseController {
   abstract handle<T>(request: T | Request): Promise<Response>
 
   constructor() {
-    this.logger = DependencyContainer.resolveToken('ILogger')
+    this.logger = DependencyContainer.resolveToken('Logger')
   }
 
   protected success<T>(dto?: T): Response {
