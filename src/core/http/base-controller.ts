@@ -1,3 +1,5 @@
+import type { ILogger } from 'infra/adapters/logger/logger'
+
 import { DependencyContainer } from '../../core/decorators/dependency-container'
 import ApplicationError from '../../core/errors/application-error'
 import ConflictError from '../../core/errors/conflict-error'
@@ -5,8 +7,6 @@ import DomainError from '../../core/errors/domain-error'
 import InfraError from '../../core/errors/infra-error'
 import ValidationError from '../../core/errors/validation-error'
 import { MiddlewareFunction } from '../../infra/adapters/validators/zod/zod-validator'
-
-import { IErrorNotifier } from './error-notifier'
 
 import 'reflect-metadata'
 
@@ -43,12 +43,12 @@ export type ContextError = {
 }
 
 export abstract class BaseController {
-  protected readonly errorNotifier: IErrorNotifier
+  protected readonly logger: ILogger
 
   abstract handle<T>(request: T | Request): Promise<Response>
 
   constructor() {
-    this.errorNotifier = DependencyContainer.resolveToken('IErrorNotifier')
+    this.logger = DependencyContainer.resolveToken('ILogger')
   }
 
   protected success<T>(dto?: T): Response {
@@ -133,9 +133,11 @@ export abstract class BaseController {
       }
     }
 
-    if (process.env.SHOULD_NOTIFY_ERROR) {
-      await this.errorNotifier.notify(error, context)
-    }
+    this.logger.fatal({
+      msg: 'Server failed. Contact the administrator!',
+      data: context,
+      error,
+    })
 
     return {
       code: 500,
