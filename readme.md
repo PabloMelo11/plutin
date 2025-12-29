@@ -41,25 +41,3 @@ Body - camelCase - snake_case
 Query - camelCase - snake_case
 Path (URLs) - kebab-case - snake_case
 Headers - kebab-case (lowercase)
-
-### Steps
-
-[x] publish in npm (automatic)
-[x] adapters (express, fastify)
-[x] controller decorator
-[x] create validator (sync)
-[TEMPLATE] Unit of Work (repositories)
-[TEMPLATE] config to test e2e
-[TEMPLATE] import paths with '@/'
-[x] controller receive error agente (sentry)
-[x] controller receive error agente (discord)
-[ ] create doc via DTO (zod?)
-[x] execute middlewares. Pass in decorator Http?
-[ ] remove dependencies to start server unnecessary (ts-node, ts-node-dev, vite-node)
-[ ] 100% coverage tests
-
-Otel
-
-- tracer deveria ser desdo inicio da requisicao
-- devemos verificar se ja existe um traceId vindo da request
-- pensar se o trace deveria passar em controller -> use case -> gateway
