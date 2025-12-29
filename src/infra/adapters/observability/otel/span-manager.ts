@@ -1,7 +1,5 @@
 import { Span, trace } from '@opentelemetry/api'
 
-const OTEL_ENABLED = process.env.OTEL_ENABLE === 'true'
-
 class NullSpan {
   setAttributes(): void {
     return
@@ -22,16 +20,12 @@ class NullSpan {
 
 class SpanManager {
   static getActiveSpan(): Span | NullSpan {
-    if (!OTEL_ENABLED) {
+    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
       return new NullSpan()
     }
 
     const span = trace.getActiveSpan()
     return span || new NullSpan()
-  }
-
-  static isEnabled(): boolean {
-    return OTEL_ENABLED
   }
 }
 
