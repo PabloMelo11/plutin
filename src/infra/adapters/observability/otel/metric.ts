@@ -71,6 +71,12 @@ export interface IMetricsManager {
 }
 
 export class MetricsManager implements IMetricsManager {
+  constructor() {
+    console.log('OTEL_ENABLE', process.env.OTEL_ENABLE)
+    console.log('OTEL_SERVICE_NAME', process.env.OTEL_SERVICE_NAME)
+    console.log('OTEL_SERVICE_VERSION', process.env.OTEL_SERVICE_VERSION)
+  }
+
   private meter = OTEL_ENABLED
     ? metrics.getMeter(
         process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
