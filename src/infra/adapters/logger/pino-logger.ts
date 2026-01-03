@@ -1,11 +1,13 @@
+import type { baseEnvSchema } from 'infra/env'
 import pino from 'pino'
+import type { z } from 'zod'
 
 import type { ILogger, LogParams } from './logger'
 
 export class PinoLogger implements ILogger {
   private pinoLogger: pino.Logger
 
-  constructor() {
+  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
     const pinoConfig: pino.LoggerOptions = {
       level: 'debug',
       formatters: {
@@ -16,7 +18,7 @@ export class PinoLogger implements ILogger {
       timestamp: pino.stdTimeFunctions.isoTime,
     }
 
-    if (process.env.ENVIRONMENT === 'development') {
+    if (this.env.ENVIRONMENT === 'development') {
       this.pinoLogger = pino(
         pinoConfig,
         pino.transport({ target: 'pino-pretty', options: { sync: false } })

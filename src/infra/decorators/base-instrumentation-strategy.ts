@@ -354,7 +354,7 @@ export function resolveLogger(): any {
   try {
     return DependencyContainer.resolveToken('Logger')
   } catch {
-    return new PinoLogger()
+    return new PinoLogger(process.env as any)
   }
 }
 

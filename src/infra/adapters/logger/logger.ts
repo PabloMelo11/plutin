@@ -51,11 +51,13 @@ export class Logger {
   ) {
     switch (provider) {
       case 'console':
-        return PinoLogger
+        return new PinoLogger(this.env)
       case 'discord':
-        return DiscordLogger
+        return new DiscordLogger(this.env)
       case 'otel':
-        return env.OTEL_ENABLE === false ? DiscordLogger : OtelLogger
+        return env.OTEL_ENABLE === false
+          ? new DiscordLogger(this.env)
+          : OtelLogger
       default:
         return PinoLogger
     }

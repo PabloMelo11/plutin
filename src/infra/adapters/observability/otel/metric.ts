@@ -74,8 +74,6 @@ export class MetricsManager implements IMetricsManager {
   private meter: Meter | null = null
 
   constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
-    console.log(`env - ${this.env}`)
-
     this.meter = this.env.OTEL_ENABLE
       ? metrics.getMeter(
           this.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
@@ -551,8 +549,6 @@ export class MetricsManager implements IMetricsManager {
   }
 
   startSystemMetricsCollection(intervalMs: number = 5000) {
-    console.log(`this.OTEL_ENABLED - ${!this.env.OTEL_ENABLE} - ${this.meter}`)
-
     if (!this.env.OTEL_ENABLE || !this.meter) {
       return
     }
