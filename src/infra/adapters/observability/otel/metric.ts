@@ -1,4 +1,4 @@
-import { type Meter, metrics } from '@opentelemetry/api'
+import { metrics } from '@opentelemetry/api'
 import { cpus } from 'node:os'
 import { monitorEventLoopDelay, PerformanceObserver } from 'node:perf_hooks'
 import v8 from 'node:v8'
@@ -69,17 +69,13 @@ export interface IMetricsManager {
 }
 
 export class MetricsManager implements IMetricsManager {
-  private meter: Meter | null = null
-
-  constructor() {
-    this.meter =
-      process.env.OTEL_ENABLE === 'true'
-        ? metrics.getMeter(
-            process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
-            process.env.OTEL_SERVICE_VERSION || '1.0.0'
-          )
-        : null
-  }
+  private meter =
+    process.env.OTEL_ENABLE === 'true'
+      ? metrics.getMeter(
+          process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
+          process.env.OTEL_SERVICE_VERSION || '1.0.0'
+        )
+      : null
 
   private httpRequestsTotal = this.meter?.createCounter('http_requests_total', {
     description: 'Total de requisições HTTP',
@@ -292,7 +288,7 @@ export class MetricsManager implements IMetricsManager {
     durationSeconds: number
     responseSizeBytes?: number
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -328,7 +324,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     errorMessage: string
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -351,7 +347,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     durationSeconds: number
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -408,7 +404,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     durationSeconds: number
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -432,7 +428,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     errorMessage: string
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -454,7 +450,7 @@ export class MetricsManager implements IMetricsManager {
       statusCode: number
     }
   ) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -469,7 +465,7 @@ export class MetricsManager implements IMetricsManager {
     operation: string
     durationSeconds: number
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -482,7 +478,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   recordProcessingError(params: { operation: string; errorType: string }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -503,7 +499,7 @@ export class MetricsManager implements IMetricsManager {
     error?: boolean
     timeout?: boolean
   }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -534,7 +530,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   recordValidationError(params: { field?: string; errorType: string }) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -548,11 +544,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   startSystemMetricsCollection(intervalMs: number = 5000) {
-    if (
-      process.env.OTEL_ENABLE === 'false' ||
-      !process.env.OTEL_ENABLE ||
-      !this.meter
-    ) {
+    if (!this.meter) {
       return
     }
 
@@ -581,11 +573,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   stopSystemMetricsCollection() {
-    if (
-      process.env.OTEL_ENABLE === 'false' ||
-      !process.env.OTEL_ENABLE ||
-      !this.meter
-    ) {
+    if (!this.meter) {
       return
     }
 
@@ -603,7 +591,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private collectSystemMetrics(observableResult: any) {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -677,7 +665,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private collectPeriodicMetrics() {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
@@ -712,7 +700,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private setupGCObserver() {
-    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
+    if (!this.meter) {
       return
     }
 
