@@ -74,6 +74,10 @@ export class MetricsManager implements IMetricsManager {
   private meter: Meter | null = null
 
   constructor() {
+    console.log(
+      `OTEL_ENABLED - ${OTEL_ENABLED} - ${typeof process.env.OTEL_ENABLE}`
+    )
+
     try {
       this.meter = OTEL_ENABLED
         ? metrics.getMeter(
@@ -81,6 +85,8 @@ export class MetricsManager implements IMetricsManager {
             process.env.OTEL_SERVICE_VERSION || '1.0.0'
           )
         : null
+
+      console.log(`Meter - ${this.meter}`)
     } catch (err) {
       console.error('Error initializing metrics manager:', err)
     }
