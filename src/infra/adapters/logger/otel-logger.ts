@@ -1,6 +1,4 @@
 import { logs, SeverityNumber } from '@opentelemetry/api-logs'
-import type { baseEnvSchema } from 'infra/env'
-import type { z } from 'zod'
 
 import type { ILogger, LogParams } from './logger'
 import { PinoLogger } from './pino-logger'
@@ -9,12 +7,12 @@ export class OtelLogger implements ILogger {
   private otelLogger: ReturnType<typeof logs.getLogger>
   private pinoLogger: PinoLogger
 
-  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
+  constructor() {
     this.otelLogger = logs.getLogger(
-      this.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
-      this.env.OTEL_SERVICE_VERSION || '1.0.0'
+      process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
+      process.env.OTEL_SERVICE_VERSION || '1.0.0'
     )
-    this.pinoLogger = new PinoLogger(this.env)
+    this.pinoLogger = new PinoLogger()
   }
 
   private emitOtelLog(

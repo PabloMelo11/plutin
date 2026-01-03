@@ -1,6 +1,4 @@
 import { MessageBuilder, Webhook } from 'discord-webhook-node'
-import type { baseEnvSchema } from 'infra/env'
-import type { z } from 'zod'
 
 import { getContext } from '../observability/node-context/context'
 
@@ -11,9 +9,9 @@ export class DiscordLogger implements ILogger {
   private webhook: Webhook
   private pinoLogger: PinoLogger
 
-  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
-    this.webhook = new Webhook(this.env.DISCORD_WEBHOOK_URL || '')
-    this.pinoLogger = new PinoLogger(this.env)
+  constructor() {
+    this.webhook = new Webhook(process.env.DISCORD_WEBHOOK_URL || '')
+    this.pinoLogger = new PinoLogger()
   }
 
   private async buildStructuredLog(
@@ -49,7 +47,7 @@ export class DiscordLogger implements ILogger {
     this.pinoLogger.info(params)
 
     const embed = new MessageBuilder()
-      .setTitle(`ℹ️ Info - ${this.env.ENVIRONMENT}`)
+      .setTitle(`ℹ️ Info - ${process.env.ENVIRONMENT}`)
       .setColor(0x3498db)
 
     this.buildStructuredLog(embed, params).catch(() =>
@@ -61,7 +59,7 @@ export class DiscordLogger implements ILogger {
     this.pinoLogger.error(params)
 
     const embed = new MessageBuilder()
-      .setTitle(`⛔ Error - ${this.env.ENVIRONMENT}`)
+      .setTitle(`⛔ Error - ${process.env.ENVIRONMENT}`)
       .setColor(0xe74c3c)
 
     this.buildStructuredLog(embed, params).catch(() =>
@@ -73,7 +71,7 @@ export class DiscordLogger implements ILogger {
     this.pinoLogger.debug(params)
 
     const embed = new MessageBuilder()
-      .setTitle(`🐛 Degub - ${this.env.ENVIRONMENT}`)
+      .setTitle(`🐛 Degub - ${process.env.ENVIRONMENT}`)
       .setColor(0x9b59b6)
 
     this.buildStructuredLog(embed, params).catch(() =>
@@ -85,7 +83,7 @@ export class DiscordLogger implements ILogger {
     this.pinoLogger.fatal(params)
 
     const embed = new MessageBuilder()
-      .setTitle(`💀 Fatal - ${this.env.ENVIRONMENT}`)
+      .setTitle(`💀 Fatal - ${process.env.ENVIRONMENT}`)
       .setColor(0xc0392b)
 
     this.buildStructuredLog(embed, params).catch(() =>
@@ -97,7 +95,7 @@ export class DiscordLogger implements ILogger {
     this.pinoLogger.warn(params)
 
     const embed = new MessageBuilder()
-      .setTitle(`⚠️ Warn - ${this.env.ENVIRONMENT}`)
+      .setTitle(`⚠️ Warn - ${process.env.ENVIRONMENT}`)
       .setColor(0xf1c40f)
 
     this.buildStructuredLog(embed, params).catch(() =>

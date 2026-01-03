@@ -4,50 +4,22 @@ type Class<T = any> = new (...args: any[]) => T
 
 type Registration =
   | { type: 'class'; myClass: Class; singleton: boolean }
-  | { type: 'instance'; instance: any; singleton: boolean }
   | { type: 'value'; value: any }
 
 export class DependencyContainer {
   static registry = new Map<string, Registration>()
   static singletons = new Map<string, any>()
 
-  private static isClass<T>(value: Class<T> | T): value is Class<T> {
-    return (
-      typeof value === 'function' &&
-      value.prototype !== undefined &&
-      value.prototype.constructor === value
-    )
-  }
-
-  /**
-   * Registra uma classe ou instância no container
-   * @param token - Identificador único do registro
-   * @param classOrInstance - Classe (será instanciada) ou instância já criada
-   * @param options - Opções de registro
-   * @note Para instâncias: sempre retorna a mesma referência, mas apenas armazena
-   * no cache de singletons se `singleton: true` (para consistência)
-   */
   static register<T>(
     token: string,
-    classOrInstance: Class<T> | T,
-    options: { singleton: boolean } = { singleton: true }
+    myClass: Class<T>,
+    options: { singleton: boolean }
   ) {
-    if (this.isClass(classOrInstance)) {
-      this.registry.set(token, {
-        type: 'class',
-        myClass: classOrInstance,
-        singleton: options.singleton,
-      })
-    } else {
-      this.registry.set(token, {
-        type: 'instance',
-        instance: classOrInstance,
-        singleton: options.singleton,
-      })
-      if (options.singleton) {
-        this.singletons.set(token, classOrInstance)
-      }
-    }
+    this.registry.set(token, {
+      type: 'class',
+      myClass,
+      singleton: options.singleton,
+    })
   }
 
   static registerValue<T>(token: string, value: T) {
@@ -86,16 +58,6 @@ export class DependencyContainer {
       return registration.value
     }
 
-    if (registration.type === 'instance') {
-      // Para instâncias, sempre retorna a mesma referência
-      // Se for singleton, busca do cache; caso contrário, retorna diretamente
-      if (registration.singleton) {
-        return this.singletons.get(token)
-      }
-      return registration.instance
-    }
-
-    // registration.type === 'class'
     const { myClass, singleton } = registration
 
     if (singleton) {

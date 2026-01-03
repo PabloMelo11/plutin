@@ -19,8 +19,6 @@ import {
   ATTR_SERVICE_VERSION,
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
 } from '@opentelemetry/semantic-conventions'
-import type { baseEnvSchema } from 'infra/env'
-import type { z } from 'zod'
 
 export class OtelManager {
   private readonly resource: Resource
@@ -32,7 +30,7 @@ export class OtelManager {
   private readonly metricReader: PeriodicExportingMetricReader
   private readonly sampler: TraceIdRatioBasedSampler
 
-  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
+  constructor() {
     this.resource = this.createResource()
     this.otlpLogExporter = this.createOtlpLogExporter()
     this.loggerProvider = this.createLoggerProvider()
@@ -46,15 +44,15 @@ export class OtelManager {
   private createResource(): Resource {
     return new Resource({
       [ATTR_SERVICE_NAME]:
-        this.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
-      [ATTR_SERVICE_VERSION]: this.env.OTEL_SERVICE_VERSION || '1.0.0',
-      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: this.env.ENVIRONMENT,
+        process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
+      [ATTR_SERVICE_VERSION]: process.env.OTEL_SERVICE_VERSION || '1.0.0',
+      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: process.env.ENVIRONMENT,
     })
   }
 
   private createOtlpLogExporter(): OTLPLogExporter {
     return new OTLPLogExporter({
-      url: `${this.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/logs`,
+      url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/logs`,
       compression: CompressionAlgorithm.GZIP,
     })
   }
@@ -78,7 +76,7 @@ export class OtelManager {
 
   private createTraceExporter(): OTLPTraceExporter {
     return new OTLPTraceExporter({
-      url: `${this.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`,
+      url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`,
       compression: CompressionAlgorithm.GZIP,
     })
   }
@@ -88,7 +86,7 @@ export class OtelManager {
     const PRODUCTION_SAMPLE_RATE = 0.01
 
     const sampleRate =
-      this.env.ENVIRONMENT === 'development'
+      process.env.ENVIRONMENT === 'development'
         ? DEVELOPMENT_SAMPLE_RATE
         : PRODUCTION_SAMPLE_RATE
 
@@ -97,7 +95,7 @@ export class OtelManager {
 
   private createMetricExporter(): OTLPMetricExporter {
     return new OTLPMetricExporter({
-      url: `${this.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/metrics`,
+      url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/metrics`,
       compression: CompressionAlgorithm.GZIP,
     })
   }
