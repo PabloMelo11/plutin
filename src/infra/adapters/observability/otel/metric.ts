@@ -1,4 +1,4 @@
-import { metrics } from '@opentelemetry/api'
+import { type Meter, metrics } from '@opentelemetry/api'
 import { cpus } from 'node:os'
 import { monitorEventLoopDelay, PerformanceObserver } from 'node:perf_hooks'
 import v8 from 'node:v8'
@@ -71,20 +71,20 @@ export interface IMetricsManager {
 }
 
 export class MetricsManager implements IMetricsManager {
-  constructor() {
-    console.log(
-      `OTEL_ENABLE - value: ${process.env.OTEL_ENABLE} - type: ${typeof process.env.OTEL_ENABLE}`
-    )
-    console.log('OTEL_SERVICE_NAME', process.env.OTEL_SERVICE_NAME)
-    console.log('OTEL_SERVICE_VERSION', process.env.OTEL_SERVICE_VERSION)
-  }
+  private meter: Meter | null = null
 
-  private meter = OTEL_ENABLED
-    ? metrics.getMeter(
-        process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
-        process.env.OTEL_SERVICE_VERSION || '1.0.0'
-      )
-    : null
+  constructor() {
+    try {
+      this.meter = OTEL_ENABLED
+        ? metrics.getMeter(
+            process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
+            process.env.OTEL_SERVICE_VERSION || '1.0.0'
+          )
+        : null
+    } catch (err) {
+      console.error('Error initializing metrics manager:', err)
+    }
+  }
 
   private httpRequestsTotal = this.meter?.createCounter('http_requests_total', {
     description: 'Total de requisições HTTP',
