@@ -1,10 +1,4 @@
 import { Span, trace } from '@opentelemetry/api'
-import type { baseEnvSchema } from 'infra/env'
-import type { z } from 'zod'
-
-export interface ISpanManager {
-  getActiveSpan(): Span | NullSpan
-}
 
 class NullSpan {
   setAttributes(): void {
@@ -24,11 +18,9 @@ class NullSpan {
   }
 }
 
-class SpanManager implements ISpanManager {
-  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {}
-
-  getActiveSpan(): Span | NullSpan {
-    if (!this.env.OTEL_ENABLE) {
+class SpanManager {
+  static getActiveSpan(): Span | NullSpan {
+    if (process.env.OTEL_ENABLE === 'false' || !process.env.OTEL_ENABLE) {
       return new NullSpan()
     }
 
