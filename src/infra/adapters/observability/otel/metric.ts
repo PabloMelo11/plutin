@@ -553,6 +553,8 @@ export class MetricsManager implements IMetricsManager {
   }
 
   startSystemMetricsCollection(intervalMs: number = 5000) {
+    console.log(`OTEL_ENABLED - ${!OTEL_ENABLED} - ${this.meter}`)
+
     if (!OTEL_ENABLED || !this.meter) {
       return
     }
