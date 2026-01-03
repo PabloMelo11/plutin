@@ -1,7 +1,9 @@
 import { type Meter, metrics } from '@opentelemetry/api'
+import type { baseEnvSchema } from 'infra/env'
 import { cpus } from 'node:os'
 import { monitorEventLoopDelay, PerformanceObserver } from 'node:perf_hooks'
 import v8 from 'node:v8'
+import type { z } from 'zod'
 
 export interface IMetricsManager {
   recordHttpRequest(params: {
@@ -69,30 +71,15 @@ export interface IMetricsManager {
 }
 
 export class MetricsManager implements IMetricsManager {
-  private OTEL_ENABLED = process.env.OTEL_ENABLE === 'true'
   private meter: Meter | null = null
 
-  constructor() {
-    console.log(
-      `OTEL ENABLE - ${process.env.OTEL_ENABLE} - ${typeof process.env.OTEL_ENABLE}`
-    )
-
-    console.log(
-      `OTEL_ENABLED - ${this.OTEL_ENABLED} - ${typeof process.env.OTEL_ENABLE}`
-    )
-
-    try {
-      this.meter = this.OTEL_ENABLED
-        ? metrics.getMeter(
-            process.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
-            process.env.OTEL_SERVICE_VERSION || '1.0.0'
-          )
-        : null
-
-      console.log(`Meter - ${this.meter}`)
-    } catch (err) {
-      console.error('Error initializing metrics manager:', err)
-    }
+  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
+    this.meter = this.env.OTEL_ENABLE
+      ? metrics.getMeter(
+          this.env.OTEL_SERVICE_NAME || 'plutin-boilerplate-common',
+          this.env.OTEL_SERVICE_VERSION || '1.0.0'
+        )
+      : null
   }
 
   private httpRequestsTotal = this.meter?.createCounter('http_requests_total', {
@@ -306,7 +293,7 @@ export class MetricsManager implements IMetricsManager {
     durationSeconds: number
     responseSizeBytes?: number
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -342,7 +329,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     errorMessage: string
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -365,7 +352,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     durationSeconds: number
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -422,7 +409,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     durationSeconds: number
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -446,7 +433,7 @@ export class MetricsManager implements IMetricsManager {
     repository: string
     errorMessage: string
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -468,7 +455,7 @@ export class MetricsManager implements IMetricsManager {
       statusCode: number
     }
   ) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -483,7 +470,7 @@ export class MetricsManager implements IMetricsManager {
     operation: string
     durationSeconds: number
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -496,7 +483,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   recordProcessingError(params: { operation: string; errorType: string }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -517,7 +504,7 @@ export class MetricsManager implements IMetricsManager {
     error?: boolean
     timeout?: boolean
   }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -548,7 +535,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   recordValidationError(params: { field?: string; errorType: string }) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -562,9 +549,9 @@ export class MetricsManager implements IMetricsManager {
   }
 
   startSystemMetricsCollection(intervalMs: number = 5000) {
-    console.log(`this.OTEL_ENABLED - ${!this.OTEL_ENABLED} - ${this.meter}`)
+    console.log(`this.OTEL_ENABLED - ${!this.env.OTEL_ENABLE} - ${this.meter}`)
 
-    if (!this.OTEL_ENABLED || !this.meter) {
+    if (!this.env.OTEL_ENABLE || !this.meter) {
       return
     }
 
@@ -593,7 +580,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   stopSystemMetricsCollection() {
-    if (!this.OTEL_ENABLED || !this.meter) {
+    if (!this.env.OTEL_ENABLE || !this.meter) {
       return
     }
 
@@ -611,7 +598,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private collectSystemMetrics(observableResult: any) {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -685,7 +672,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private collectPeriodicMetrics() {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 
@@ -720,7 +707,7 @@ export class MetricsManager implements IMetricsManager {
   }
 
   private setupGCObserver() {
-    if (!this.OTEL_ENABLED) {
+    if (!this.env.OTEL_ENABLE) {
       return
     }
 

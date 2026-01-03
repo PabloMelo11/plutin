@@ -8,7 +8,7 @@ import qs from 'qs'
 
 import type { ILogger } from '../logger/logger'
 import type { IMetricsManager } from '../observability/otel/metric'
-import { SpanManager } from '../observability/otel/span-manager'
+import { type ISpanManager } from '../observability/otel/span-manager'
 
 import { validateControllerMetadata } from './validate-controller-metadata'
 
@@ -26,6 +26,7 @@ export class FastifyAdapter implements IHttp {
 
   constructor(
     @Inject('Logger') private logger: ILogger,
+    @Inject('Span') private span: ISpanManager,
     @Inject('Metrics') private metrics?: IMetricsManager
   ) {
     this.instance = fastify({
@@ -40,7 +41,7 @@ export class FastifyAdapter implements IHttp {
     this.instance.register(cors)
 
     this.instance.addHook('onRequest', async (request) => {
-      const span = SpanManager.getActiveSpan()
+      const span = this.span.getActiveSpan()
 
       span.setAttributes({
         httpMethod: request.method,
@@ -68,7 +69,7 @@ export class FastifyAdapter implements IHttp {
 
     this.instance.addHook('onResponse', async (request, reply) => {
       const route = this.getNormalizedRoute(request)
-      const span = SpanManager.getActiveSpan()
+      const span = this.span.getActiveSpan()
       const responseTime = reply.elapsedTime || 0
 
       span.setAttributes({
@@ -123,7 +124,7 @@ export class FastifyAdapter implements IHttp {
           query: request.query,
         } as Request
 
-        const activeSpan = SpanManager.getActiveSpan()
+        const activeSpan = this.span.getActiveSpan()
 
         try {
           activeSpan.setAttributes({
