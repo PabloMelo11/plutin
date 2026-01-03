@@ -19,6 +19,8 @@ import {
   ATTR_SERVICE_VERSION,
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
 } from '@opentelemetry/semantic-conventions'
+import type { baseEnvSchema } from 'infra/env'
+import type { z } from 'zod'
 
 export class OtelManager {
   private readonly resource: Resource
@@ -30,7 +32,7 @@ export class OtelManager {
   private readonly metricReader: PeriodicExportingMetricReader
   private readonly sampler: TraceIdRatioBasedSampler
 
-  constructor(private readonly env: Record<string, any>) {
+  constructor(private readonly env: z.infer<typeof baseEnvSchema>) {
     this.resource = this.createResource()
     this.otlpLogExporter = this.createOtlpLogExporter()
     this.loggerProvider = this.createLoggerProvider()
