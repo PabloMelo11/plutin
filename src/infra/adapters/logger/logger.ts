@@ -55,7 +55,9 @@ export class Logger {
       case 'discord':
         return new DiscordLogger(env)
       case 'otel':
-        return env.OTEL_ENABLE === false ? new DiscordLogger(env) : OtelLogger
+        return env.OTEL_ENABLE === false
+          ? new DiscordLogger(env)
+          : new OtelLogger(env)
       default:
         return PinoLogger
     }
