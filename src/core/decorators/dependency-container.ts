@@ -10,6 +10,11 @@ export class DependencyContainer {
   static registry = new Map<string, Registration>()
   static singletons = new Map<string, any>()
 
+  static reset() {
+    this.registry.clear()
+    this.singletons.clear()
+  }
+
   static register<T>(
     token: string,
     myClass: Class<T>,
