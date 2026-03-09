@@ -10,6 +10,11 @@ export class DependencyContainer {
   static registry = new Map<string, Registration>()
   static singletons = new Map<string, any>()
 
+  static reset() {
+    this.registry.clear()
+    this.singletons.clear()
+  }
+
   static register<T>(
     token: string,
     myClass: Class<T>,
@@ -30,7 +35,13 @@ export class DependencyContainer {
     const injectMetadata: Record<number, string> =
       Reflect.getOwnMetadata('inject:params', target) || {}
 
-    const paramCount = Object.keys(injectMetadata).length
+    const designParamTypes: unknown[] =
+      Reflect.getMetadata('design:paramtypes', target) || []
+
+    const paramCount = Math.max(
+      designParamTypes.length,
+      Object.keys(injectMetadata).length
+    )
 
     const params = Array.from({ length: paramCount }, (_, index) => {
       const token = injectMetadata[index]
